@@ -8,6 +8,7 @@
 
 <title>Invest - IA Traders</title>
 
+
 <style>
 
 body{
@@ -16,6 +17,7 @@ color:white;
 font-family:Arial,sans-serif;
 padding:20px;
 }
+
 
 .container{
 max-width:500px;
@@ -27,9 +29,11 @@ padding:25px;
 text-align:center;
 }
 
+
 h1,h2{
 color:gold;
 }
+
 
 .info{
 background:#111;
@@ -38,16 +42,30 @@ border-radius:10px;
 margin:20px 0;
 }
 
+
 input,select{
+
 width:100%;
 padding:12px;
 margin:10px 0;
 border-radius:8px;
 border:none;
 font-size:16px;
+
 }
 
+
+#amount{
+
+color:gold;
+font-size:20px;
+font-weight:bold;
+
+}
+
+
 button{
+
 width:100%;
 padding:14px;
 background:#25D366;
@@ -57,11 +75,16 @@ border-radius:8px;
 font-size:18px;
 font-weight:bold;
 cursor:pointer;
+
 }
 
+
 button:hover{
+
 background:#1da851;
+
 }
+
 
 </style>
 
@@ -73,9 +96,12 @@ background:#1da851;
 
 <div class="container">
 
+
 <h1>IA Traders</h1>
 
 <h2>Investment</h2>
+
+
 
 
 <div class="info">
@@ -90,14 +116,40 @@ background:#1da851;
 
 
 
+
+
 <select id="plan">
 
+
 <option value="">Select Plan</option>
-<option>Starter Plan</option>
-<option>Basic Plan</option>
-<option>Premium Plan</option>
+
+<option value="Starter Plan - Rs.500">
+Starter Plan - Rs.500
+</option>
+
+
+<option value="Basic Plan - Rs.1000">
+Basic Plan - Rs.1000
+</option>
+
+
+<option value="Premium Plan - Rs.1500">
+Premium Plan - Rs.1500
+</option>
+
+
+<option value="Gold Plan - Rs.2000">
+Gold Plan - Rs.2000
+</option>
+
 
 </select>
+
+
+
+
+<p id="amount"></p>
+
 
 
 
@@ -108,52 +160,116 @@ placeholder="Customer Name">
 
 
 
+
+
 <input 
 type="file"
-accept="image/*"
->
+accept="image/*">
+
+
 
 
 
 <button onclick="sendWhatsApp()">
+
 Submit
+
 </button>
+
 
 
 </div>
 
 
 
+
+
 <script>
 
-function sendWhatsApp(){
 
-let plan = document.getElementById("plan").value;
-let name = document.getElementById("name").value;
+document.getElementById("plan").addEventListener("change",function(){
 
 
-if(plan=="" || name==""){
-alert("Please select plan and enter your name");
-return;
+let amount="";
+
+
+if(this.value=="Starter Plan - Rs.500"){
+
+amount="Amount to Pay: Rs.500";
+
+}
+
+else if(this.value=="Basic Plan - Rs.1000"){
+
+amount="Amount to Pay: Rs.1000";
+
+}
+
+else if(this.value=="Premium Plan - Rs.1500"){
+
+amount="Amount to Pay: Rs.1500";
+
+}
+
+else if(this.value=="Gold Plan - Rs.2000"){
+
+amount="Amount to Pay: Rs.2000";
+
 }
 
 
-let message =
+document.getElementById("amount").innerHTML=amount;
+
+
+});
+
+
+
+
+
+function sendWhatsApp(){
+
+
+let plan=document.getElementById("plan").value;
+
+let name=document.getElementById("name").value;
+
+
+
+if(plan=="" || name==""){
+
+alert("Please select plan and enter your name");
+
+return;
+
+}
+
+
+
+let message=
+
 "Assalam o Alaikum,%0A%0A"+
 "I want to invest in IA Traders.%0A%0A"+
 "Plan: "+plan+"%0A"+
 "Customer Name: "+name+"%0A%0A"+
-"I will send payment screenshot on WhatsApp.";
+"Payment screenshot will be sent on WhatsApp.";
+
 
 
 window.open(
+
 "https://wa.me/923145597079?text="+message,
+
 "_blank"
+
 );
+
 
 }
 
+
 </script>
+
 
 
 </body>
