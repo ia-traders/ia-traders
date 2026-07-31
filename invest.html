@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Invest - IA Traders</title>
+
+<style>
+
+body{
+background:#0f0f0f;
+color:white;
+font-family:Arial,sans-serif;
+padding:20px;
+}
+
+.container{
+max-width:500px;
+margin:auto;
+background:#1b1b1b;
+border:2px solid gold;
+border-radius:15px;
+padding:25px;
+text-align:center;
+}
+
+h1,h2{
+color:gold;
+}
+
+.info{
+background:#111;
+padding:15px;
+border-radius:10px;
+margin:20px 0;
+}
+
+input,select{
+width:100%;
+padding:12px;
+margin:10px 0;
+border-radius:8px;
+border:none;
+font-size:16px;
+}
+
+button{
+width:100%;
+padding:14px;
+background:#25D366;
+color:white;
+border:none;
+border-radius:8px;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+}
+
+button:hover{
+background:#1da851;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+<h1>IA Traders</h1>
+
+<h2>Investment</h2>
+
+
+<div class="info">
+
+<p>Payment Method: FirstPay</p>
+
+<p>Account Name: Muhammad Zubaier</p>
+
+<p>Account Number: 03290293365</p>
+
+</div>
+
+
+
+<select id="plan">
+
+<option>Select Plan</option>
+<option>Starter Plan</option>
+<option>Basic Plan</option>
+<option>Premium Plan</option>
+
+</select>
+
+
+
+<input 
+type="text"
+id="name"
+placeholder="Customer Name">
+
+
+
+<input 
+type="file"
+accept="image/*"
+>
+
+
+
+<button onclick="sendWhatsApp()">
+Submit
+</button>
+
+
+</div>
+
+
+
+<script>
+
+function sendWhatsApp(){
+
+let plan=document.getElementById("plan").value;
+
+let name=document.getElementById("name").value;
+
+
+let message=
+"Assalam o Alaikum,%0A%0A"+
+"I want to invest.%0A"+
+"Plan: "+plan+"%0A"+
+"Customer Name: "+name;
+
+
+window.open(
+"https://wa.me/923145597079?text="+message,
+"_blank"
+);
+
+}
+
+</script>
+
+
+</body>
+
+</html>
