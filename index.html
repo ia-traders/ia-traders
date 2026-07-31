@@ -11,11 +11,28 @@ margin:0;
 padding:0;
 box-sizing:border-box;
 font-family:Arial,sans-serif;
+scroll-behavior:smooth;
 }
 
 body{
-background:linear-gradient(135deg,#0f0f0f,#1c1c1c,#000);
-color:white;
+background:#0f0f0f;
+color:#fff;
+}
+
+header{
+background:#111;
+padding:18px;
+border-bottom:2px solid #FFD700;
+position:sticky;
+top:0;
+z-index:999;
+}
+
+header h2{
+text-align:center;
+color:#FFD700;
+font-size:30px;
+letter-spacing:2px;
 }
 
 .container{
@@ -26,11 +43,16 @@ padding:20px;
 
 .card{
 background:#181818;
-border:2px solid #d4af37;
+border:2px solid #FFD700;
 border-radius:20px;
-padding:20px;
+padding:25px;
 text-align:center;
-box-shadow:0 0 25px rgba(212,175,55,.35);
+box-shadow:0 0 25px rgba(255,215,0,.25);
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
 }
 
 h1{
@@ -40,9 +62,9 @@ margin-bottom:10px;
 }
 
 .subtitle{
-font-size:18px;
-color:#ddd;
+color:#ccc;
 margin-bottom:25px;
+font-size:18px;
 }
 
 img{
@@ -55,39 +77,103 @@ margin-bottom:25px;
 .contact-btn{
 display:inline-block;
 background:#25D366;
+padding:16px 35px;
 color:white;
 text-decoration:none;
-padding:16px 35px;
 font-size:20px;
 font-weight:bold;
-border-radius:12px;
+border-radius:10px;
 transition:.3s;
 }
 
 .contact-btn:hover{
-background:#1ea952;
+background:#1fa851;
 transform:scale(1.05);
 }
 
-.footer{
-margin-top:30px;
+.about{
+margin-top:35px;
+background:#181818;
+padding:25px;
+border-radius:15px;
+border:1px solid #FFD700;
+}
+
+.about h3{
+color:#FFD700;
+margin-bottom:15px;
+}
+
+.about p{
+color:#ddd;
+line-height:1.7;
+}
+
+footer{
+margin-top:40px;
+text-align:center;
+padding:20px;
 color:#aaa;
-font-size:14px;
+border-top:1px solid #333;
+}
+
+.whatsapp{
+position:fixed;
+bottom:20px;
+right:20px;
+width:65px;
+height:65px;
+background:#25D366;
+border-radius:50%;
+display:flex;
+justify-content:center;
+align-items:center;
+text-decoration:none;
+font-size:32px;
+box-shadow:0 0 20px rgba(0,0,0,.4);
+transition:.3s;
+}
+
+.whatsapp:hover{
+transform:scale(1.1);
+}
+
+@media(max-width:600px){
+
+h1{
+font-size:32px;
+}
+
+header h2{
+font-size:24px;
+}
+
+.contact-btn{
+width:100%;
+}
+
 }
 </style>
 
 </head>
+
 <body>
+
+<header>
+<h2>IA Traders</h2>
+</header>
 
 <div class="container">
 
 <div class="card">
 
-<h1>IA Traders</h1>
+<h1>Welcome</h1>
 
-<p class="subtitle">Trusted Trading Community</p>
+<p class="subtitle">
+Professional Trading Community
+</p>
 
-<img src="WhatsApp%20Image%202026-07-30%20at%207.18.32%20PM.jpeg" alt="IA Traders">
+<img src="WhatsApp%20Image%202026-07-30%20at%207.18.32%20PM.jpeg">
 
 <a class="contact-btn"
 href="https://wa.me/923145597079"
@@ -95,13 +181,31 @@ target="_blank">
 Contact Now
 </a>
 
-<div class="footer">
-Pakistan 🇵🇰
 </div>
+
+<div class="about">
+
+<h3>About IA Traders</h3>
+
+<p>
+Welcome to IA Traders. We are committed to providing professional support and assistance through WhatsApp. Feel free to contact us for more information.
+</p>
 
 </div>
 
+<footer>
+
+© 2026 IA Traders | Pakistan 🇵🇰
+
+</footer>
+
 </div>
+
+<a class="whatsapp"
+href="https://wa.me/923145597079"
+target="_blank">
+💬
+</a>
 
 </body>
 </html>
