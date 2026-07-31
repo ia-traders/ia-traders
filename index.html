@@ -34,7 +34,7 @@ color:white;
 
 header{
 background:#111;
-padding:50px 20px;
+padding:40px 20px;
 text-align:center;
 border-bottom:2px solid gold;
 }
@@ -53,50 +53,27 @@ margin-top:10px;
 }
 
 
-.btn{
-display:inline-block;
-margin-top:20px;
-padding:14px 25px;
-background:#25D366;
-color:white;
-text-decoration:none;
-font-weight:bold;
-border-radius:10px;
-}
-
-
-.btn:hover{
-background:#1da851;
-}
-
-
 .container{
 max-width:1200px;
 margin:auto;
-padding:30px 20px;
+padding:20px;
 }
 
 
 section{
-text-align:center;
 padding:40px 0;
+text-align:center;
 }
 
 
 h2{
 color:gold;
 font-size:32px;
-margin-bottom:20px;
+margin-bottom:25px;
 }
 
 
-p{
-line-height:1.6;
-color:#ccc;
-}
-
-
-.services{
+.plans{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
 gap:20px;
@@ -108,78 +85,39 @@ background:#1b1b1b;
 border:2px solid gold;
 border-radius:15px;
 padding:25px;
-box-shadow:0 0 15px rgba(255,215,0,.2);
+box-shadow:0 0 15px rgba(255,215,0,.25);
 }
 
 
 .card h3{
 color:gold;
-margin-bottom:10px;
+font-size:26px;
 }
 
 
-.gallery{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:20px;
+.card p{
+color:#ccc;
+margin-top:12px;
+font-size:18px;
 }
 
 
-.poster{
-background:#1b1b1b;
-border:2px solid gold;
-border-radius:15px;
-overflow:hidden;
-}
-
-
-.poster img{
-width:100%;
-height:400px;
-object-fit:cover;
-}
-
-
-footer{
-text-align:center;
-padding:25px;
-border-top:1px solid #333;
-color:#aaa;
-}
-
-
-.whatsapp{
-position:fixed;
-right:20px;
-bottom:20px;
+.btn{
+display:block;
+margin-top:20px;
+padding:14px;
 background:#25D366;
-width:60px;
-height:60px;
-border-radius:50%;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:30px;
+color:white;
+font-weight:bold;
 text-decoration:none;
+border-radius:8px;
 }
 
 
-@media(max-width:900px){
-
-.gallery{
-grid-template-columns:repeat(2,1fr);
+.btn:hover{
+background:#1da851;
 }
 
-}
-
-
-@media(max-width:500px){
-
-.gallery{
-grid-template-columns:1fr;
-}
-
-}
 
 </style>
 
@@ -195,124 +133,201 @@ grid-template-columns:1fr;
 
 <p>Professional Trading Community</p>
 
-<a class="btn" href="https://wa.me/923145597079" target="_blank">
-Contact Now
-</a>
-
 </header>
-
 
 
 <div class="container">
 
+
+<!-- Investment Plans -->
+
+<section>
+
+<h2>Investment Plans</h2>
+
+
+<div class="plans">
+
+
+<div class="card">
+
+<h3>Starter Plan</h3>
+
+<p>Investment: Rs.500</p>
+
+<p>Daily Profit: Rs.50</p>
+
+<a class="btn" href="https://wa.me/923145597079" target="_blank">
+Invest Now
+</a>
+
+</div>
+
+
+
+<div class="card">
+
+<h3>Basic Plan</h3>
+
+<p>Investment: Rs.1000</p>
+
+<p>Daily Profit: Rs.100</p>
+
+<a class="btn" href="https://wa.me/923145597079" target="_blank">
+Invest Now
+</a>
+
+</div>
+
+
+
+<div class="card">
+
+<h3>Premium Plan</h3>
+
+<p>Investment: Rs.5000</p>
+
+<p>Daily Profit: Rs.500</p>
+
+<a class="btn" href="https://wa.me/923145597079" target="_blank">
+Invest Now
+</a>
+
+</div>
+
+
+</div>
+
+</section><!-- About Section -->
 
 <section>
 
 <h2>About IA Traders</h2>
 
 <p>
-IA Traders provides trading related information, market insights and community support.
+IA Traders is a professional trading community platform providing trading related information, market insights and community support.
 </p>
 
 </section>
 
 
+
+<!-- Services Section -->
 
 <section>
 
 <h2>Our Services</h2>
 
-<div class="services">
+
+<div class="plans">
 
 
 <div class="card">
+
 <h3>Trading Guidance</h3>
+
 <p>
-Learn about markets and trading concepts.
+Learn about trading concepts and market information.
 </p>
+
 </div>
 
 
 <div class="card">
+
+<h3>Market Updates</h3>
+
+<p>
+Stay connected with trading related updates.
+</p>
+
+</div>
+
+
+<div class="card">
+
 <h3>Community Support</h3>
+
 <p>
-Connect with our community for updates.
+Get support and information through our community.
 </p>
+
 </div>
+
+
+</div>
+
+</section>
+
+
+
+
+<!-- Posters Section -->
+
+<section>
+
+<h2>Our Plans</h2>
+
+
+<div class="plans">
 
 
 <div class="card">
-<h3>Market Insights</h3>
-<p>
-Stay updated with trading information.
-</p>
-</div>
 
-
-</div>
-
-</section>
-
-
-
-<section>
-
-<h2>Our Posters</h2>
-
-
-<div class="gallery">
-
-
-<div class="poster">
-<img src="poster 1.jpeg">
-</div>
-
-
-<div class="poster">
-<img src="poster 2.jpeg">
-</div>
-
-
-<div class="poster">
-<img src="poster 3.jpeg">
-</div>
-
-
-<div class="poster">
-<img src="poster 4.jpeg">
-</div>
-
-
-</div>
-
-
-</section>
-
-
-
-<section>
-
-<h2>Contact IA Traders</h2>
-
-<p>
-For more information contact us on WhatsApp.
-</p>
-
+<img src="poster 1.jpeg" style="width:100%;border-radius:10px;">
 
 <a class="btn" href="https://wa.me/923145597079" target="_blank">
-WhatsApp
+Invest Now
 </a>
-
-
-</section>
-
-
 
 </div>
 
 
 
-<footer>
+<div class="card">
+
+<img src="poster 2.jpeg" style="width:100%;border-radius:10px;">
+
+<a class="btn" href="https://wa.me/923145597079" target="_blank">
+Invest Now
+</a>
+
+</div>
+
+
+
+<div class="card">
+
+<img src="poster 3.jpeg" style="width:100%;border-radius:10px;">
+
+<a class="btn" href="https://wa.me/923145597079" target="_blank">
+Invest Now
+</a>
+
+</div>
+
+
+
+<div class="card">
+
+<img src="poster 4.jpeg" style="width:100%;border-radius:10px;">
+
+<a class="btn" href="https://wa.me/923145597079" target="_blank">
+Invest Now
+</a>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+
+<!-- Footer -->
+
+<footer style="text-align:center;padding:25px;color:#aaa;border-top:1px solid #333;">
 
 © 2026 IA Traders | Pakistan 🇵🇰
 
@@ -320,10 +335,29 @@ WhatsApp
 
 
 
-<a class="whatsapp" href="https://wa.me/923145597079" target="_blank">
+<!-- Floating WhatsApp -->
+
+<a class="whatsapp"
+href="https://wa.me/923145597079"
+target="_blank"
+style="
+position:fixed;
+right:20px;
+bottom:20px;
+background:#25D366;
+width:60px;
+height:60px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:30px;
+text-decoration:none;">
 💬
 </a>
 
+
+</div>
 
 </body>
 
