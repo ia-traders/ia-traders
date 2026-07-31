@@ -11,7 +11,6 @@ margin:0;
 padding:0;
 box-sizing:border-box;
 font-family:Arial,sans-serif;
-scroll-behavior:smooth;
 }
 
 body{
@@ -21,92 +20,68 @@ color:#fff;
 
 header{
 background:#111;
-padding:18px;
-border-bottom:2px solid #FFD700;
-position:sticky;
-top:0;
-z-index:999;
+padding:20px;
+text-align:center;
+border-bottom:2px solid gold;
 }
 
-header h2{
-text-align:center;
-color:#FFD700;
-font-size:30px;
-letter-spacing:2px;
+header h1{
+color:gold;
+font-size:40px;
+}
+
+header p{
+color:#ccc;
+margin-top:8px;
 }
 
 .container{
-max-width:700px;
-margin:40px auto;
-padding:20px;
+max-width:1400px;
+margin:auto;
+padding:30px 20px;
+}
+
+.gallery{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:20px;
 }
 
 .card{
-background:#181818;
-border:2px solid #FFD700;
-border-radius:20px;
-padding:25px;
-text-align:center;
-box-shadow:0 0 25px rgba(255,215,0,.25);
+background:#1b1b1b;
+border:2px solid gold;
+border-radius:15px;
+overflow:hidden;
+box-shadow:0 0 15px rgba(255,215,0,.25);
 transition:.3s;
 }
 
 .card:hover{
-transform:translateY(-5px);
+transform:translateY(-8px);
 }
 
-h1{
-font-size:42px;
-color:#FFD700;
-margin-bottom:10px;
-}
-
-.subtitle{
-color:#ccc;
-margin-bottom:25px;
-font-size:18px;
-}
-
-img{
+.card img{
 width:100%;
-border-radius:15px;
-border:3px solid #FFD700;
-margin-bottom:25px;
+height:260px;
+object-fit:cover;
+display:block;
 }
 
-.contact-btn{
-display:inline-block;
+.btn{
+display:block;
+margin:15px;
+padding:14px;
+text-align:center;
 background:#25D366;
-padding:16px 35px;
 color:white;
-text-decoration:none;
-font-size:20px;
 font-weight:bold;
-border-radius:10px;
+text-decoration:none;
+border-radius:8px;
 transition:.3s;
 }
 
-.contact-btn:hover{
-background:#1fa851;
-transform:scale(1.05);
-}
-
-.about{
-margin-top:35px;
-background:#181818;
-padding:25px;
-border-radius:15px;
-border:1px solid #FFD700;
-}
-
-.about h3{
-color:#FFD700;
-margin-bottom:15px;
-}
-
-.about p{
-color:#ddd;
-line-height:1.7;
+.btn:hover{
+background:#1da851;
 }
 
 footer{
@@ -126,77 +101,60 @@ height:65px;
 background:#25D366;
 border-radius:50%;
 display:flex;
-justify-content:center;
 align-items:center;
+justify-content:center;
+font-size:32px;
 text-decoration:none;
-font-size:32px;
 box-shadow:0 0 20px rgba(0,0,0,.4);
-transition:.3s;
 }
 
-.whatsapp:hover{
-transform:scale(1.1);
+@media(max-width:900px){
+.gallery{
+grid-template-columns:repeat(2,1fr);
+}
 }
 
-@media(max-width:600px){
-
-h1{
-font-size:32px;
+@media(max-width:500px){
+.gallery{
+grid-template-columns:1fr;
 }
-
-header h2{
-font-size:24px;
-}
-
-.contact-btn{
-width:100%;
-}
-
 }
 </style>
-
 </head>
 
 <body>
 
 <header>
-<h2>IA Traders</h2>
+<h1>IA Traders</h1>
+<p>Professional Trading Community</p>
 </header>
 
 <div class="container">
 
-<div class="card">
-
-<h1>Welcome</h1>
-
-<p class="subtitle">
-Professional Trading Community
-</p>
-
-<img src="WhatsApp%20Image%202026-07-30%20at%207.18.32%20PM.jpeg">
-
-<a class="contact-btn"
-href="https://wa.me/923145597079"
-target="_blank">
-Contact Now
-</a>
-
+<div class="gallery"><div class="card">
+<img src="poster 1.jpeg" alt="Poster 1">
+<a class="btn" href="https://wa.me/923145597079" target="_blank">Contact Now</a>
 </div>
 
-<div class="about">
+<div class="card">
+<img src="poster 2.jpeg" alt="Poster 2">
+<a class="btn" href="https://wa.me/923145597079" target="_blank">Contact Now</a>
+</div>
 
-<h3>About IA Traders</h3>
+<div class="card">
+<img src="poster 3.jpeg" alt="Poster 3">
+<a class="btn" href="https://wa.me/923145597079" target="_blank">Contact Now</a>
+</div>
 
-<p>
-Welcome to IA Traders. We are committed to providing professional support and assistance through WhatsApp. Feel free to contact us for more information.
-</p>
+<div class="card">
+<img src="poster 4.jpeg" alt="Poster 4">
+<a class="btn" href="https://wa.me/923145597079" target="_blank">Contact Now</a>
+</div>
 
 </div>
 
 <footer>
-
 © 2026 IA Traders | Pakistan 🇵🇰
-
 </footer>
 
 </div>
