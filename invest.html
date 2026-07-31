@@ -80,11 +80,11 @@ background:#1da851;
 
 <div class="info">
 
-<p>Payment Method: FirstPay</p>
+<p><b>Payment Method:</b> FirstPay</p>
 
-<p>Account Name: Muhammad Zubaier</p>
+<p><b>Account Name:</b> Muhammad Zubaier</p>
 
-<p>Account Number: 03290293365</p>
+<p><b>Account Number:</b> 03290293365</p>
 
 </div>
 
@@ -92,7 +92,7 @@ background:#1da851;
 
 <select id="plan">
 
-<option>Select Plan</option>
+<option value="">Select Plan</option>
 <option>Starter Plan</option>
 <option>Basic Plan</option>
 <option>Premium Plan</option>
@@ -128,16 +128,22 @@ Submit
 
 function sendWhatsApp(){
 
-let plan=document.getElementById("plan").value;
+let plan = document.getElementById("plan").value;
+let name = document.getElementById("name").value;
 
-let name=document.getElementById("name").value;
+
+if(plan=="" || name==""){
+alert("Please select plan and enter your name");
+return;
+}
 
 
-let message=
+let message =
 "Assalam o Alaikum,%0A%0A"+
-"I want to invest.%0A"+
+"I want to invest in IA Traders.%0A%0A"+
 "Plan: "+plan+"%0A"+
-"Customer Name: "+name;
+"Customer Name: "+name+"%0A%0A"+
+"I will send payment screenshot on WhatsApp.";
 
 
 window.open(
