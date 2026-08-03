@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -24,14 +23,21 @@ body{
     border:2px solid gold;
     border-radius:15px;
     padding:25px;
+}
+
+h1,h2{
+    color:gold;
     text-align:center;
 }
 
-h1{
-    color:gold;
+.payment{
+    background:#111;
+    padding:15px;
+    border-radius:10px;
+    margin-bottom:20px;
 }
 
-input{
+input,select{
     width:90%;
     padding:12px;
     margin:10px;
@@ -52,24 +58,46 @@ button{
 
 </head>
 
-
 <body>
-
 
 <div class="box">
 
 <h1>IA Traders</h1>
 
-<h2 id="planName">Investment Plan</h2>
+<div class="payment">
 
-<p id="amount"></p>
+<h2>Payment Send To</h2>
 
-<p id="profit"></p>
+<p>Method: FirstPay</p>
+
+<p>Account Name: Muhammnd Zubair</p>
+
+<p>Account Number: 03290293365</p>
+
+</div>
+
+
+<h2>Select Your Plan</h2>
+
+<select id="plan" onchange="updateAmount()">
+
+<option value="1000">Rs.1000 Plan</option>
+<option value="1500">Rs.1500 Plan</option>
+<option value="2000">Rs.2000 Plan</option>
+<option value="3000">Rs.3000 Plan</option>
+<option value="5000">Rs.5000 Plan</option>
+
+</select>
+
+
+<p id="amount">
+Amount Send: Rs.1000
+</p>
 
 
 <input type="text" placeholder="Your Name">
 
-<input type="text" placeholder="Payment Method">
+<input type="text" placeholder="Your Payment Account Number">
 
 
 <button>
@@ -82,20 +110,14 @@ Submit Request
 
 <script>
 
-const params = new URLSearchParams(window.location.search);
+function updateAmount(){
 
-
-document.getElementById("planName").innerHTML =
-params.get("plan") || "Investment Plan";
-
+let amount = document.getElementById("plan").value;
 
 document.getElementById("amount").innerHTML =
-"Investment: Rs." + (params.get("amount") || "");
+"Amount Send: Rs." + amount;
 
-
-document.getElementById("profit").innerHTML =
-"Daily Profit: Rs." + (params.get("profit") || "");
-
+}
 
 </script>
 
