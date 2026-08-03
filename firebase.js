@@ -31,4 +31,5 @@ export {
   collection,
   serverTimestamp,
   getDocs
-};
+};doc,
+updateDoc
