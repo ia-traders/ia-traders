@@ -19,7 +19,8 @@ submitBtn.addEventListener("click", async () => {
     return;
   }
 
-  const plan = document.getElementById("plan").value;
+  const plan = Number(document.getElementById("plan").value);
+
   const senderName = document.getElementById("senderName").value.trim();
   const senderNumber = document.getElementById("senderNumber").value.trim();
 
@@ -28,31 +29,79 @@ submitBtn.addEventListener("click", async () => {
     return;
   }
 
+  // Plan Details
+  let dailyProfit = 0;
+  let planName = "";
+
+  switch (plan) {
+
+    case 1000:
+      dailyProfit = 100;
+      planName = "Starter";
+      break;
+
+    case 1500:
+      dailyProfit = 170;
+      planName = "Silver";
+      break;
+
+    case 2000:
+      dailyProfit = 230;
+      planName = "Gold";
+      break;
+
+    case 3000:
+      dailyProfit = 350;
+      planName = "Premium";
+      break;
+
+    case 5000:
+      dailyProfit = 570;
+      planName = "VIP";
+      break;
+
+    default:
+      alert("Invalid Plan");
+      return;
+  }
+
   try {
 
     await addDoc(collection(db, "investmentRequests"), {
-      email: user.email,
+
       uid: user.uid,
+      email: user.email,
+
       plan: plan,
+      planName: planName,
+
       amount: plan,
+      dailyProfit: dailyProfit,
+
+      totalEarned: 0,
+      withdrawableBalance: 0,
+
       senderName: senderName,
       senderNumber: senderNumber,
+
       paymentMethod: "FirstPay",
       receiverName: "Muhammad Zubair",
       receiverNumber: "03290293365",
+
       status: "Pending",
+
       createdAt: serverTimestamp()
+
     });
 
     alert("Investment request submitted successfully.");
 
-    // Dashboard par bhej do
     window.location.href = "dashboard.html";
 
   } catch (error) {
 
     console.error(error);
-    alert("Error: " + error.message);
+    alert(error.message);
 
   }
 
