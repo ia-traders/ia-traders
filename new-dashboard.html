@@ -56,14 +56,12 @@ button{
     cursor:pointer;
 }
 
-
 .menu{
     display:grid;
     grid-template-columns:repeat(4,1fr);
     gap:10px;
     margin-top:30px;
 }
-
 
 .menu div{
     background:#1b1b1b;
@@ -73,11 +71,9 @@ button{
     cursor:pointer;
 }
 
-
 .icon{
     font-size:25px;
 }
-
 
 .share{
     background:#1b1b1b;
@@ -86,12 +82,10 @@ button{
     margin-top:25px;
 }
 
-
 .link{
     color:#2ecc71;
     word-break:break-all;
 }
-
 
 </style>
 
@@ -109,11 +103,12 @@ IA Traders
 </div>
 
 
+
 <div class="balance-card">
 
 <h3>Available Balance</h3>
 
-<div class="balance">
+<div class="balance" id="balance">
 Rs.0
 </div>
 
@@ -158,7 +153,6 @@ Withdraw
 
 
 
-
 <div class="share">
 
 <h3>Share Website</h3>
@@ -168,8 +162,13 @@ https://ia-traders.github.io/ia-traders
 </p>
 
 
-<button>
+<button id="copyBtn">
 Copy Link
+</button>
+
+
+<button id="logoutBtn">
+Logout
 </button>
 
 
@@ -178,6 +177,106 @@ Copy Link
 
 
 </div>
+
+
+
+<script type="module">
+
+
+import {
+ db,
+ auth,
+ onAuthStateChanged,
+ collection,
+ getDocs,
+ signOut
+} from "./firebase.js";
+
+
+const balance = document.getElementById("balance");
+
+
+// Load User Balance
+
+onAuthStateChanged(auth, async(user)=>{
+
+
+if(!user){
+
+window.location.href="login.html";
+return;
+
+}
+
+
+
+const snapshot = await getDocs(
+collection(db,"investmentRequests")
+);
+
+
+let totalBalance = 0;
+
+
+
+snapshot.forEach((item)=>{
+
+
+const data = item.data();
+
+
+if(data.uid === user.uid && data.status === "Approved"){
+
+
+totalBalance += Number(data.amount);
+
+
+}
+
+
+
+});
+
+
+
+balance.innerHTML = "Rs." + totalBalance;
+
+
+
+});
+
+
+
+// Copy Website Link
+
+document.getElementById("copyBtn").onclick = ()=>{
+
+
+navigator.clipboard.writeText(
+"https://ia-traders.github.io/ia-traders"
+);
+
+
+alert("Website link copied");
+
+};
+
+
+
+// Logout
+
+document.getElementById("logoutBtn").onclick = async()=>{
+
+
+await signOut(auth);
+
+window.location.href="login.html";
+
+
+};
+
+
+</script>
 
 
 </body>
