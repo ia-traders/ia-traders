@@ -9,8 +9,25 @@ const firebaseConfig = {
   measurementId: "G-CMP393T3KY"
 };
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {
+  getFirestore,
+  addDoc,
+  collection,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
-export { app, db };
+
+const auth = getAuth(app);
+
+export {
+  app,
+  db,
+  auth,
+  addDoc,
+  collection,
+  serverTimestamp
+};
