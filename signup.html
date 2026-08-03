@@ -20,6 +20,26 @@
 <button id="signupBtn">Signup</button>
 
 <script type="module" src="firebase.js"></script>
+<script type="module">
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { app } from "./firebase.js";
 
+const auth = getAuth(app);
+
+document.getElementById("signupBtn").addEventListener("click", () => {
+
+let email = document.getElementById("email").value;
+let password = document.getElementById("password").value;
+
+createUserWithEmailAndPassword(auth, email, password)
+.then(() => {
+alert("Account Created Successfully");
+})
+.catch((error) => {
+alert(error.message);
+});
+
+});
+</script>
 </body>
 </html>
