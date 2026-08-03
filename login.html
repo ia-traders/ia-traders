@@ -1,1 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>IA Traders Login</title>
+
+<style>
+
+body{
+    background:#0f0f0f;
+    color:white;
+    font-family:Arial,sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.login-box{
+    background:#1b1b1b;
+    padding:30px;
+    width:320px;
+    border-radius:15px;
+    border:2px solid gold;
+    text-align:center;
+}
+
+h2{
+    color:gold;
+}
+
+input{
+    width:90%;
+    padding:12px;
+    margin:10px;
+    border-radius:8px;
+    border:none;
+}
+
+button{
+    width:95%;
+    padding:12px;
+    background:gold;
+    border:none;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div class="login-box">
+
+<h2>Login</h2>
+
+<input type="email" id="email" placeholder="Email">
+
+<input type="password" id="password" placeholder="Password">
+
+<button id="loginBtn">
+Login
+</button>
+
+</div>
+
+
+<script type="module">
+
+import { app } from "./firebase.js";
+
+import {
+getAuth,
+signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+
+const auth = getAuth(app);
+
+
+
+document.getElementById("loginBtn").addEventListener("click", async()=>{
+
+
+let email = document.getElementById("email").value;
+
+let password = document.getElementById("password").value;
+
+
+
+try{
+
+await signInWithEmailAndPassword(
+auth,
+email,
+password
+);
+
+
+alert("Login Successful");
+
+
+}
+
+catch(error){
+
+alert(error.message);
+
+}
+
+
+
+});
+
+
+</script>
+
+
+</body>
+
+</html>
