@@ -1,45 +1,173 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>IA Traders Signup</title>
+
+<style>
+
+body{
+    background:#0f0f0f;
+    color:white;
+    font-family:Arial,sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.signup-box{
+    background:#1b1b1b;
+    padding:30px;
+    width:320px;
+    border-radius:15px;
+    border:2px solid gold;
+    text-align:center;
+}
+
+h2{
+    color:gold;
+}
+
+input{
+    width:90%;
+    padding:12px;
+    margin:10px;
+    border-radius:8px;
+    border:none;
+}
+
+button{
+    width:95%;
+    padding:12px;
+    background:gold;
+    border:none;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#d4af37;
+}
+
+</style>
+
 </head>
+
 
 <body>
 
+
+<div class="signup-box">
+
 <h2>Create Account</h2>
 
+
 <input type="text" id="name" placeholder="Your Name">
-<br><br>
+
 
 <input type="email" id="email" placeholder="Email">
-<br><br>
+
 
 <input type="password" id="password" placeholder="Password">
-<br><br>
 
-<button id="signupBtn">Signup</button>
 
-<script type="module" src="firebase.js"></script>
+<button id="signupBtn">
+Signup
+</button>
+
+
+</div>
+
+
+
 <script type="module">
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { app } from "./firebase.js";
+
+import { app, db } from "./firebase.js";
+
+import { 
+getAuth,
+createUserWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+
+import {
+doc,
+setDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 
 const auth = getAuth(app);
 
-document.getElementById("signupBtn").addEventListener("click", () => {
+
+
+document.getElementById("signupBtn").addEventListener("click", async ()=>{
+
+
+let name = document.getElementById("name").value;
 
 let email = document.getElementById("email").value;
+
 let password = document.getElementById("password").value;
 
-createUserWithEmailAndPassword(auth, email, password)
-.then(() => {
-alert("Account Created Successfully");
-})
-.catch((error) => {
-alert(error.message);
-});
+
+
+try{
+
+
+const userCredential = await createUserWithEmailAndPassword(
+auth,
+email,
+password
+);
+
+
+const user = userCredential.user;
+
+
+
+await setDoc(doc(db,"users",user.uid),{
+
+
+name:name,
+
+email:email,
+
+createdAt:new Date()
+
 
 });
+
+
+
+alert("Account Created Successfully");
+
+
+
+}
+
+
+catch(error){
+
+
+alert(error.message);
+
+
+}
+
+
+
+});
+
+
 </script>
+
+
 </body>
+
 </html>
