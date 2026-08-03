@@ -14,35 +14,25 @@ body{
     background:#0f0f0f;
     color:white;
     font-family:Arial,sans-serif;
+    padding:20px;
+}
+
+.box{
+    max-width:600px;
+    margin:auto;
+}
+
+h1{
     text-align:center;
-    padding:30px;
+    color:gold;
 }
 
 .card{
     background:#1b1b1b;
     border:2px solid gold;
     border-radius:15px;
-    padding:25px;
-    max-width:400px;
-    margin:auto;
-}
-
-h1{
-    color:gold;
-}
-
-.info{
+    padding:20px;
     margin:15px 0;
-    font-size:18px;
-}
-
-button{
-    padding:12px 25px;
-    background:gold;
-    border:none;
-    border-radius:8px;
-    font-weight:bold;
-    cursor:pointer;
 }
 
 </style>
@@ -53,103 +43,23 @@ button{
 <body>
 
 
-<div class="card">
+<div class="box">
 
-<h1>IA Traders</h1>
+<h1>IA Traders Dashboard</h1>
 
-<h2 id="userName">
+
+<div id="userData">
+
 Loading...
-</h2>
 
-<p class="info" id="userEmail"></p>
-
-<p class="info">
-Member Dashboard
-</p>
-
-<button id="logout">
-Logout
-</button>
+</div>
 
 
 </div>
 
 
 
-<script type="module">
-
-import { app, db } from "./firebase.js";
-
-
-import {
-getAuth,
-onAuthStateChanged,
-signOut
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-
-import {
-doc,
-getDoc
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-
-
-const auth = getAuth(app);
-
-
-
-onAuthStateChanged(auth, async(user)=>{
-
-
-if(user){
-
-
-document.getElementById("userEmail").innerHTML =
-"Email: " + user.email;
-
-
-
-const userDoc = await getDoc(
-doc(db,"users",user.uid)
-);
-
-
-
-if(userDoc.exists()){
-
-document.getElementById("userName").innerHTML =
-"Welcome, " + userDoc.data().name;
-
-}
-
-
-}else{
-
-
-window.location.href="login.html";
-
-
-}
-
-
-});
-
-
-
-
-document.getElementById("logout").onclick = async()=>{
-
-
-await signOut(auth);
-
-window.location.href="login.html";
-
-
-};
-
-
-</script>
+<script type="module" src="dashboard.js"></script>
 
 
 </body>
