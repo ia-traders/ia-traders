@@ -6,8 +6,7 @@ import {
   serverTimestamp
 } from "./firebase.js";
 
-const submitBtn = document.getElementById("submitRequest");
-
+console.log("Investment JS Loaded");
 submitBtn.addEventListener("click", async () => {
 
   const user = auth.currentUser;
