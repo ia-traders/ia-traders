@@ -1,5 +1,7 @@
 import {
   db,
+  auth,
+  onAuthStateChanged,
   collection,
   getDocs,
   doc,
@@ -8,8 +10,23 @@ import {
 
 
 const requestsDiv = document.getElementById("requests");
+const ADMIN_EMAIL = "irfanali555567@gmail.com";
 
+onAuthStateChanged(auth, (user) => {
 
+  if (!user) {
+    location.href = "login.html";
+    return;
+  }
+
+if (user.email !== ADMIN_EMAIL) {
+  document.body.innerHTML = "<h1 style='color:red;text-align:center;margin-top:50px;'>Access Denied</h1>";
+  return;
+}
+
+loadRequests();
+
+});
 async function loadRequests(){
 
   const snapshot = await getDocs(
@@ -95,4 +112,4 @@ window.rejectRequest = async function(id){
 
 
 
-loadRequests();
+
