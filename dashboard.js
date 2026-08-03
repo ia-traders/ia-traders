@@ -1,14 +1,14 @@
 import {
   db,
   auth,
+  onAuthStateChanged,
   collection,
   getDocs
 } from "./firebase.js";
 
 const userData = document.getElementById("userData");
 
-auth.onAuthStateChanged(async (user) => {
-
+onAuthStateChanged(auth, async (user) => {
   if (!user) {
     userData.innerHTML = "<h2>Please login first.</h2>";
     return;
