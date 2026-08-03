@@ -23,68 +23,55 @@ onAuthStateChanged(auth, async (user) => {
 
     const data = item.data();
 
-    if (data.uid === user.uid) {
+    if (data.uid !== user.uid) return;
 
-      // Status Color
-      let statusColor = "#f1c40f";
+    // Status Color
+    let statusColor = "#f1c40f";
 
-      if (data.status === "Approved") {
-        statusColor = "#2ecc71";
-      }
+    if (data.status === "Approved") {
+      statusColor = "#2ecc71";
+    } else if (data.status === "Rejected") {
+      statusColor = "#e74c3c";
+    }
 
-      if (data.status === "Rejected") {
-        statusColor = "#e74c3c";
-      }
+    // Investment Date
+    let investmentDate = "Not Available";
 
-      // Investment Date
-      let investmentDate = "Not Available";
+    if (data.createdAt) {
+      investmentDate = data.createdAt.toDate().toLocaleString();
+    }
 
-      if (data.createdAt) {
-        investmentDate = data.createdAt.toDate().toLocaleString();
-      }
+    // Daily Profit (new field + fallback)
+    let dailyProfit = data.dailyProfit ?? 0;
 
-      // Daily Profit
-      let dailyProfit = 0;
-
+    if (dailyProfit === 0) {
       switch (Number(data.plan)) {
-
-        case 1000:
-          dailyProfit = 100;
-          break;
-
-        case 1500:
-          dailyProfit = 170;
-          break;
-
-        case 2000:
-          dailyProfit = 230;
-          break;
-
-        case 3000:
-          dailyProfit = 350;
-          break;
-
-        case 5000:
-          dailyProfit = 570;
-          break;
-
-        default:
-          dailyProfit = 0;
+        case 1000: dailyProfit = 100; break;
+        case 1500: dailyProfit = 170; break;
+        case 2000: dailyProfit = 230; break;
+        case 3000: dailyProfit = 350; break;
+        case 5000: dailyProfit = 570; break;
       }
+    }
 
-      html += `
+    const planName = data.planName || "Investment Plan";
+    const totalEarned = data.totalEarned ?? 0;
+    const withdrawableBalance = data.withdrawableBalance ?? 0;
 
+    html += `
       <div class="card">
 
-        <h2 style="color:gold;">Investment Details</h2>
+        <h2 style="color:gold;">${planName}</h2>
 
         <p><b>Email:</b> ${user.email}</p>
 
-        <p><b>Plan:</b> Rs.${data.plan}</p>
-
-        <p><b>Investment Amount:</b> Rs.${data.amount}</p>
+        <p><b>Investment:</b> Rs.${data.amount}</p>
 
         <p><b>Daily Profit:</b> Rs.${dailyProfit}</p>
+
+        <p><b>Total Earned:</b> Rs.${totalEarned}</p>
+
+        <p><b>Withdrawable Balance:</b> Rs.${withdrawableBalance}</p>
 
         <p><b>Payment Method:</b> ${data.paymentMethod}</p>
 
@@ -97,11 +84,22 @@ onAuthStateChanged(auth, async (user) => {
           </span>
         </p>
 
+        <button
+          style="
+            width:100%;
+            margin-top:15px;
+            padding:12px;
+            background:gold;
+            border:none;
+            border-radius:8px;
+            font-weight:bold;
+            cursor:pointer;
+          ">
+          Withdraw
+        </button>
+
       </div>
-
-      `;
-
-    }
+    `;
 
   });
 
