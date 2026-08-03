@@ -1,8 +1,11 @@
 import {
   db,
   collection,
-  getDocs
+  getDocs,
+  doc,
+  updateDoc
 } from "./firebase.js";
+
 
 
 const requestsDiv = document.getElementById("requests");
