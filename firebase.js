@@ -13,9 +13,9 @@ import {
   getFirestore,
   addDoc,
   collection,
-  serverTimestamp
+  serverTimestamp,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 const app = initializeApp(firebaseConfig);
 
@@ -29,5 +29,6 @@ export {
   auth,
   addDoc,
   collection,
-  serverTimestamp
+  serverTimestamp,
+  getDocs
 };
