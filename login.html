@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
@@ -55,7 +56,9 @@ button{
 
 </head>
 
+
 <body>
+
 
 <div class="login-box">
 
@@ -71,6 +74,8 @@ Login
 
 </div>
 
+
+
 <script type="module">
 
 import { app } from "./firebase.js";
@@ -80,39 +85,69 @@ import {
   signInWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+
 const auth = getAuth(app);
 
-document.getElementById("loginBtn").addEventListener("click", async () => {
 
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
+document.getElementById("loginBtn").addEventListener("click", async()=>{
 
-  try {
 
-    const userCredential = await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+const email = document.getElementById("email").value.trim();
 
-    alert("Login Successful");
-      window.location.href = "new-dashboard.html";
+const password = document.getElementById("password").value;
 
-    if (userCredential.user.email === "irfanali555567@gmail.com") {
-      window.location.href = "admin.html";
-    } else {
-      window.location.href = "dashboard.html";
-    }
 
-  } catch (error) {
 
-    alert(error.message);
+if(email === "" || password === ""){
+    alert("Please fill all fields");
+    return;
+}
 
-  }
+
+try{
+
+
+const userCredential = await signInWithEmailAndPassword(
+    auth,
+    email,
+    password
+);
+
+
+alert("Login Successful");
+
+
+// Admin ko admin panel bhejna
+if(userCredential.user.email === "irfanali555567@gmail.com"){
+
+    window.location.href = "admin.html";
+
+}
+
+// Normal user ko new dashboard
+else{
+
+    window.location.href = "new-dashboard.html";
+
+}
+
+
+}
+
+catch(error){
+
+alert(error.message);
+
+}
+
+
 
 });
 
+
 </script>
 
+
 </body>
+
 </html>
