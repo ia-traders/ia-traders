@@ -8,3 +8,6 @@ const firebaseConfig = {
   appId: "1:366586172551:web:6acbea9e1bb7d9c2fc9422",
   measurementId: "G-CMP393T3KY"
 };
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+const app = initializeApp(firebaseConfig);
