@@ -25,6 +25,7 @@ onAuthStateChanged(auth, async (user) => {
 
     if (data.uid === user.uid) {
 
+      // Status Color
       let statusColor = "#f1c40f";
 
       if (data.status === "Approved") {
@@ -35,13 +36,44 @@ onAuthStateChanged(auth, async (user) => {
         statusColor = "#e74c3c";
       }
 
+      // Investment Date
       let investmentDate = "Not Available";
 
       if (data.createdAt) {
         investmentDate = data.createdAt.toDate().toLocaleString();
       }
 
+      // Daily Profit
+      let dailyProfit = 0;
+
+      switch (Number(data.plan)) {
+
+        case 1000:
+          dailyProfit = 100;
+          break;
+
+        case 1500:
+          dailyProfit = 170;
+          break;
+
+        case 2000:
+          dailyProfit = 230;
+          break;
+
+        case 3000:
+          dailyProfit = 350;
+          break;
+
+        case 5000:
+          dailyProfit = 570;
+          break;
+
+        default:
+          dailyProfit = 0;
+      }
+
       html += `
+
       <div class="card">
 
         <h2 style="color:gold;">Investment Details</h2>
@@ -51,6 +83,8 @@ onAuthStateChanged(auth, async (user) => {
         <p><b>Plan:</b> Rs.${data.plan}</p>
 
         <p><b>Investment Amount:</b> Rs.${data.amount}</p>
+
+        <p><b>Daily Profit:</b> Rs.${dailyProfit}</p>
 
         <p><b>Payment Method:</b> ${data.paymentMethod}</p>
 
@@ -64,7 +98,9 @@ onAuthStateChanged(auth, async (user) => {
         </p>
 
       </div>
+
       `;
+
     }
 
   });
