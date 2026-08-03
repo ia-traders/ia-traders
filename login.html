@@ -98,18 +98,23 @@ let password = document.getElementById("password").value;
 
 try{
 
-await signInWithEmailAndPassword(
-auth,
-email,
-password
+const userCredential = await signInWithEmailAndPassword(
+  auth,
+  email,
+  password
 );
-
 
 alert("Login Successful");
 
+if (userCredential.user.email === "irfanali555567@gmail.com") {
+
+  window.location.href = "admin.html";
+
+} else {
+
+  window.location.href = "dashboard.html";
 
 }
-
 catch(error){
 
 alert(error.message);
