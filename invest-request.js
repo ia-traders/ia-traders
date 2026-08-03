@@ -7,6 +7,9 @@ import {
 } from "./firebase.js";
 
 console.log("Investment JS Loaded");
+
+const submitBtn = document.getElementById("submitRequest");
+
 submitBtn.addEventListener("click", async () => {
 
   const user = auth.currentUser;
@@ -25,20 +28,32 @@ submitBtn.addEventListener("click", async () => {
     return;
   }
 
-  await addDoc(collection(db, "investmentRequests"), {
-    email: user.email,
-    uid: user.uid,
-    plan: plan,
-    amount: plan,
-    senderName: senderName,
-    senderNumber: senderNumber,
-    paymentMethod: "FirstPay",
-    receiverName: "Muhammad Zubair",
-    receiverNumber: "03290293365",
-    status: "Pending",
-    createdAt: serverTimestamp()
-  });
+  try {
 
-  alert("Investment request submitted successfully.");
+    await addDoc(collection(db, "investmentRequests"), {
+      email: user.email,
+      uid: user.uid,
+      plan: plan,
+      amount: plan,
+      senderName: senderName,
+      senderNumber: senderNumber,
+      paymentMethod: "FirstPay",
+      receiverName: "Muhammad Zubair",
+      receiverNumber: "03290293365",
+      status: "Pending",
+      createdAt: serverTimestamp()
+    });
+
+    alert("Investment request submitted successfully.");
+
+    // Dashboard par bhej do
+    window.location.href = "dashboard.html";
+
+  } catch (error) {
+
+    console.error(error);
+    alert("Error: " + error.message);
+
+  }
 
 });
