@@ -1,1 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Investment Request - IA Traders</title>
+
+<style>
+
+body{
+    background:#0f0f0f;
+    color:white;
+    font-family:Arial,sans-serif;
+    padding:20px;
+}
+
+.box{
+    max-width:400px;
+    margin:auto;
+    background:#1b1b1b;
+    border:2px solid gold;
+    border-radius:15px;
+    padding:25px;
+    text-align:center;
+}
+
+h1{
+    color:gold;
+}
+
+input{
+    width:90%;
+    padding:12px;
+    margin:10px;
+    border-radius:8px;
+    border:none;
+}
+
+button{
+    width:95%;
+    padding:12px;
+    background:gold;
+    border:none;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="box">
+
+<h1>IA Traders</h1>
+
+<h2 id="planName">Investment Plan</h2>
+
+<p id="amount"></p>
+
+<p id="profit"></p>
+
+
+<input type="text" placeholder="Your Name">
+
+<input type="text" placeholder="Payment Method">
+
+
+<button>
+Submit Request
+</button>
+
+
+</div>
+
+
+<script>
+
+const params = new URLSearchParams(window.location.search);
+
+
+document.getElementById("planName").innerHTML =
+params.get("plan") || "Investment Plan";
+
+
+document.getElementById("amount").innerHTML =
+"Investment: Rs." + (params.get("amount") || "");
+
+
+document.getElementById("profit").innerHTML =
+"Daily Profit: Rs." + (params.get("profit") || "");
+
+
+</script>
+
+
+</body>
+
+</html>
