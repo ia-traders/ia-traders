@@ -6,85 +6,55 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Invest - IA Traders</title>
-
+<title>IA Traders Plans</title>
 
 <style>
 
 body{
-background:#0f0f0f;
-color:white;
-font-family:Arial,sans-serif;
-padding:20px;
+    background:#0f0f0f;
+    color:white;
+    font-family:Arial,sans-serif;
+    padding:20px;
 }
 
-
-.container{
-max-width:500px;
-margin:auto;
-background:#1b1b1b;
-border:2px solid gold;
-border-radius:15px;
-padding:25px;
-text-align:center;
+h1{
+    text-align:center;
+    color:gold;
 }
 
-
-h1,h2{
-color:gold;
+.plans{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:20px;
 }
 
-
-.info{
-background:#111;
-padding:15px;
-border-radius:10px;
-margin:20px 0;
+.card{
+    background:#1b1b1b;
+    border:2px solid gold;
+    border-radius:15px;
+    width:260px;
+    padding:20px;
+    text-align:center;
 }
 
-
-input,select{
-
-width:100%;
-padding:12px;
-margin:10px 0;
-border-radius:8px;
-border:none;
-font-size:16px;
-
+.card h2{
+    color:gold;
 }
 
-
-#amount{
-
-color:gold;
-font-size:20px;
-font-weight:bold;
-
+.price{
+    font-size:25px;
+    font-weight:bold;
 }
-
 
 button{
-
-width:100%;
-padding:14px;
-background:#25D366;
-color:white;
-border:none;
-border-radius:8px;
-font-size:18px;
-font-weight:bold;
-cursor:pointer;
-
+    background:gold;
+    border:none;
+    padding:12px 25px;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
 }
-
-
-button:hover{
-
-background:#1da851;
-
-}
-
 
 </style>
 
@@ -94,182 +64,53 @@ background:#1da851;
 <body>
 
 
-<div class="container">
+<h1>IA Traders Investment Plans</h1>
 
 
-<h1>IA Traders</h1>
-
-<h2>Investment</h2>
+<div class="plans">
 
 
-
-
-<div class="info">
-
-<p><b>Payment Method:</b> FirstPay</p>
-
-<p><b>Account Name:</b> Muhammad Zubaier</p>
-
-<p><b>Account Number:</b> 03290293365</p>
-
+<div class="card">
+<h2>Basic Plan</h2>
+<p class="price">Rs.1000</p>
+<p>Daily Profit: Rs.100</p>
+<button>Invest Now</button>
 </div>
 
 
-
-
-
-<select id="plan">
-
-
-<option value="">Select Plan</option>
-
-<option value="Starter Plan - Rs.500">
-Starter Plan - Rs.500
-</option>
-
-
-<option value="Basic Plan - Rs.1000">
-Basic Plan - Rs.1000
-</option>
-
-
-<option value="Premium Plan - Rs.1500">
-Premium Plan - Rs.1500
-</option>
-
-
-<option value="Gold Plan - Rs.2000">
-Gold Plan - Rs.2000
-</option>
-
-
-</select>
-
-
-
-
-<p id="amount"></p>
-
-
-
-
-<input 
-type="text"
-id="name"
-placeholder="Customer Name">
-
-
-
-
-
-<input 
-type="file"
-accept="image/*">
-
-
-
-
-
-<button onclick="sendWhatsApp()">
-
-Submit
-
-</button>
-
-
-
+<div class="card">
+<h2>Silver Plan</h2>
+<p class="price">Rs.1500</p>
+<p>Daily Profit: Rs.170</p>
+<button>Invest Now</button>
 </div>
 
 
+<div class="card">
+<h2>Gold Plan</h2>
+<p class="price">Rs.2000</p>
+<p>Daily Profit: Rs.230</p>
+<button>Invest Now</button>
+</div>
 
 
-
-<script>
-
-
-document.getElementById("plan").addEventListener("change",function(){
-
-
-let amount="";
+<div class="card">
+<h2>Premium Plan</h2>
+<p class="price">Rs.3000</p>
+<p>Daily Profit: Rs.350</p>
+<button>Invest Now</button>
+</div>
 
 
-if(this.value=="Starter Plan - Rs.500"){
-
-amount="Amount to Pay: Rs.500";
-
-}
-
-else if(this.value=="Basic Plan - Rs.1000"){
-
-amount="Amount to Pay: Rs.1000";
-
-}
-
-else if(this.value=="Premium Plan - Rs.1500"){
-
-amount="Amount to Pay: Rs.1500";
-
-}
-
-else if(this.value=="Gold Plan - Rs.2000"){
-
-amount="Amount to Pay: Rs.2000";
-
-}
+<div class="card">
+<h2>VIP Plan</h2>
+<p class="price">Rs.5000</p>
+<p>Daily Profit: Rs.570</p>
+<button>Invest Now</button>
+</div>
 
 
-document.getElementById("amount").innerHTML=amount;
-
-
-});
-
-
-
-
-
-function sendWhatsApp(){
-
-
-let plan=document.getElementById("plan").value;
-
-let name=document.getElementById("name").value;
-
-
-
-if(plan=="" || name==""){
-
-alert("Please select plan and enter your name");
-
-return;
-
-}
-
-
-
-let message=
-
-"Assalam o Alaikum,%0A%0A"+
-"I want to invest in IA Traders.%0A%0A"+
-"Plan: "+plan+"%0A"+
-"Customer Name: "+name+"%0A%0A"+
-"Payment screenshot will be sent on WhatsApp.";
-
-
-
-window.open(
-
-"https://wa.me/923145597079?text="+message,
-
-"_blank"
-
-);
-
-
-}
-
-
-</script>
-
+</div>
 
 
 </body>
