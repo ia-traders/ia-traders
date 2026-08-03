@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>IA Traders Dashboard</title>
+
+<style>
+
+body{
+    margin:0;
+    background:#0f0f0f;
+    color:white;
+    font-family:Arial,sans-serif;
+}
+
+.container{
+    max-width:500px;
+    margin:auto;
+    padding:20px;
+}
+
+.logo{
+    text-align:center;
+    color:gold;
+    font-size:28px;
+    font-weight:bold;
+}
+
+.balance-card{
+    background:#1b1b1b;
+    border:2px solid gold;
+    border-radius:20px;
+    padding:30px;
+    text-align:center;
+    margin-top:25px;
+}
+
+.balance{
+    font-size:35px;
+    color:#2ecc71;
+    font-weight:bold;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    margin-top:15px;
+    border:none;
+    border-radius:10px;
+    background:gold;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+
+.menu{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+    margin-top:30px;
+}
+
+
+.menu div{
+    background:#1b1b1b;
+    padding:15px 5px;
+    border-radius:12px;
+    text-align:center;
+    cursor:pointer;
+}
+
+
+.icon{
+    font-size:25px;
+}
+
+
+.share{
+    background:#1b1b1b;
+    padding:20px;
+    border-radius:15px;
+    margin-top:25px;
+}
+
+
+.link{
+    color:#2ecc71;
+    word-break:break-all;
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<div class="logo">
+IA Traders
+</div>
+
+
+<div class="balance-card">
+
+<h3>Available Balance</h3>
+
+<div class="balance">
+Rs.0
+</div>
+
+
+<button>
+Withdraw
+</button>
+
+
+</div>
+
+
+
+<div class="menu">
+
+
+<div>
+<div class="icon">🏠</div>
+Home
+</div>
+
+
+<div onclick="location.href='plans.html'">
+<div class="icon">📦</div>
+Plans
+</div>
+
+
+<div onclick="location.href='deposit-history.html'">
+<div class="icon">💰</div>
+Deposit
+</div>
+
+
+<div onclick="location.href='withdraw-history.html'">
+<div class="icon">💸</div>
+Withdraw
+</div>
+
+
+</div>
+
+
+
+
+<div class="share">
+
+<h3>Share Website</h3>
+
+<p class="link">
+https://ia-traders.github.io/ia-traders
+</p>
+
+
+<button>
+Copy Link
+</button>
+
+
+</div>
+
+
+
+</div>
+
+
+</body>
+
+</html>
