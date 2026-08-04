@@ -1,1 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Withdraw | IA Traders</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+<div class="box">
+
+<h1>Withdraw Request</h1>
+
+<div class="card">
+
+<label>Withdraw Amount</label><br><br>
+
+<input
+type="number"
+id="amount"
+placeholder="Enter Amount"
+style="width:100%;padding:12px;border-radius:8px;margin-bottom:15px;">
+
+<label>Payment Method</label><br><br>
+
+<select
+id="paymentMethod"
+style="width:100%;padding:12px;border-radius:8px;margin-bottom:15px;">
+
+<option>JazzCash</option>
+<option>Easypaisa</option>
+<option>Bank Account</option>
+
+</select>
+
+<label>Account Number</label><br><br>
+
+<input
+type="text"
+id="account"
+placeholder="03XXXXXXXXX / Bank Account"
+style="width:100%;padding:12px;border-radius:8px;">
+
+<br><br>
+
+<button
+id="withdrawBtn"
+style="width:100%;padding:14px;background:gold;border:none;border-radius:10px;font-weight:bold;cursor:pointer;">
+
+Submit Withdraw Request
+
+</button>
+
+</div>
+
+</div>
+
+<script type="module" src="js/withdraw.js"></script>
+
+</body>
+
+</html>
