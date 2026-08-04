@@ -4,7 +4,7 @@ import {
   onAuthStateChanged,
   collection,
   getDocs
-} from "./firebase.js";
+} from "../firebase.js";
 
 const userData = document.getElementById("userData");
 
@@ -41,16 +41,26 @@ onAuthStateChanged(auth, async (user) => {
       investmentDate = data.createdAt.toDate().toLocaleString();
     }
 
-    // Daily Profit (new field + fallback)
+    // Daily Profit
     let dailyProfit = data.dailyProfit ?? 0;
 
     if (dailyProfit === 0) {
       switch (Number(data.plan)) {
-        case 1000: dailyProfit = 100; break;
-        case 1500: dailyProfit = 170; break;
-        case 2000: dailyProfit = 230; break;
-        case 3000: dailyProfit = 350; break;
-        case 5000: dailyProfit = 570; break;
+        case 1000:
+          dailyProfit = 100;
+          break;
+        case 1500:
+          dailyProfit = 170;
+          break;
+        case 2000:
+          dailyProfit = 230;
+          break;
+        case 3000:
+          dailyProfit = 350;
+          break;
+        case 5000:
+          dailyProfit = 570;
+          break;
       }
     }
 
