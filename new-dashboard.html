@@ -195,7 +195,7 @@ import {
 const balance = document.getElementById("balance");
 
 
-// Load User Balance
+// Load User Withdrawable Balance
 
 onAuthStateChanged(auth, async(user)=>{
 
@@ -214,6 +214,7 @@ collection(db,"investmentRequests")
 );
 
 
+
 let totalBalance = 0;
 
 
@@ -227,7 +228,7 @@ const data = item.data();
 if(data.uid === user.uid && data.status === "Approved"){
 
 
-totalBalance += Number(data.amount);
+totalBalance += Number(data.withdrawableBalance || 0);
 
 
 }
@@ -246,6 +247,7 @@ balance.innerHTML = "Rs." + totalBalance;
 
 
 
+
 // Copy Website Link
 
 document.getElementById("copyBtn").onclick = ()=>{
@@ -259,6 +261,7 @@ navigator.clipboard.writeText(
 alert("Website link copied");
 
 };
+
 
 
 
