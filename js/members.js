@@ -3,7 +3,9 @@ import {
   auth,
   onAuthStateChanged,
   collection,
-  getDocs
+  getDocs,
+  query,
+  where
 } from "../firebase.js";
 
 console.log("Members JS Loaded");
@@ -31,9 +33,12 @@ async function loadMembers() {
     </tr>
   `;
 
-  const snapshot = await getDocs(
-    collection(db, "investmentRequests")
-  );
+ const q = query(
+  collection(db, "investmentRequests"),
+  where("status", "==", "Approved")
+);
+
+const snapshot = await getDocs(q);
 
   let html = "";
 
