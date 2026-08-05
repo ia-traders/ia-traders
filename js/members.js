@@ -39,7 +39,7 @@ async function loadMembers() {
 );
 
 const snapshot = await getDocs(q);
-
+let html = "";
 const shownUsers = new Set();
   
   snapshot.forEach((item) => {
