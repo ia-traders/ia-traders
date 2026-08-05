@@ -40,11 +40,14 @@ async function loadMembers() {
 
 const snapshot = await getDocs(q);
 
-  let html = "";
-
+const shownUsers = new Set();
+  
   snapshot.forEach((item) => {
 
     const data = item.data();
+    if (shownUsers.has(data.uid)) return;
+
+shownUsers.add(data.uid);
 
     html += `
       <tr>
@@ -60,8 +63,10 @@ const snapshot = await getDocs(q);
         <td>${data.status || "-"}</td>
 
         <td>
-          <button>Manage</button>
-        </td>
+<button onclick="manageMember('${item.id}')">
+  Manage
+</button>
+</td>
 
       </tr>
     `;
@@ -81,3 +86,8 @@ const snapshot = await getDocs(q);
   membersTable.innerHTML = html;
 
 }
+window.manageMember = function(id){
+
+  alert("Member ID: " + id);
+
+};
