@@ -1,188 +1,78 @@
-<!DOCTYPE html>
-<html lang="en">
+import {
+  db,
+  auth,
+  onAuthStateChanged,
+  collection,
+  getDocs
+} from "../firebase.js";
 
-<head>
+console.log("Members JS Loaded");
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+const membersTable = document.getElementById("membersTable");
 
-<title>Members | IA Traders Admin</title>
+onAuthStateChanged(auth, async (user) => {
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  if (!user) {
+    location.href = "login.html";
+    return;
+  }
 
-<style>
+  loadMembers();
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
+});
+
+async function loadMembers() {
+
+  membersTable.innerHTML = `
+    <tr>
+      <td colspan="6" style="padding:30px;text-align:center;">
+        Loading Members...
+      </td>
+    </tr>
+  `;
+
+  const snapshot = await getDocs(
+    collection(db, "investmentRequests")
+  );
+
+  let html = "";
+
+  snapshot.forEach((item) => {
+
+    const data = item.data();
+
+    html += `
+      <tr>
+
+        <td style="padding:15px;">${data.senderName || "-"}</td>
+
+        <td>${data.email || "-"}</td>
+
+        <td>${data.planName || "-"}</td>
+
+        <td>Rs.${data.withdrawableBalance || 0}</td>
+
+        <td>${data.status || "-"}</td>
+
+        <td>
+          <button>Manage</button>
+        </td>
+
+      </tr>
+    `;
+
+  });
+
+  if (html === "") {
+    html = `
+      <tr>
+        <td colspan="6" style="padding:30px;text-align:center;">
+          No Members Found
+        </td>
+      </tr>
+    `;
+  }
+
+  membersTable.innerHTML = html;
+
 }
-
-body{
-background:#0f0f0f;
-color:white;
-display:flex;
-min-height:100vh;
-}
-
-.sidebar{
-width:260px;
-background:#181818;
-border-right:2px solid gold;
-padding:20px;
-}
-
-.logo{
-font-size:28px;
-font-weight:bold;
-color:gold;
-text-align:center;
-margin-bottom:40px;
-}
-
-.menu a{
-display:flex;
-align-items:center;
-gap:15px;
-text-decoration:none;
-color:white;
-padding:15px;
-margin-bottom:10px;
-border-radius:10px;
-transition:.3s;
-}
-
-.menu a:hover{
-background:gold;
-color:black;
-}
-
-.main{
-flex:1;
-padding:30px;
-}
-
-.header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:30px;
-}
-
-.header h1{
-color:gold;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<div class="sidebar">
-
-<div class="logo">
-IA Traders
-</div>
-
-<div class="menu">
-
-<a href="admin-dashboard.html">
-<i class="fas fa-house"></i>
-Dashboard
-</a>
-
-<a href="members.html">
-<i class="fas fa-users"></i>
-Members
-</a>
-
-</div>
-
-</div>
-
-<div class="main">
-
-<div class="header">
-
-<h1>Members</h1>
-
-</div><!-- Search Box -->
-
-<div style="margin-bottom:25px;">
-
-<input
-type="text"
-id="searchMember"
-placeholder="Search by Name or Email..."
-style="
-width:100%;
-padding:14px;
-border-radius:10px;
-border:2px solid gold;
-background:#1b1b1b;
-color:white;
-font-size:16px;
-outline:none;
-">
-
-</div>
-
-<!-- Members Table -->
-
-<div
-style="
-background:#1b1b1b;
-border:2px solid gold;
-border-radius:15px;
-overflow:hidden;
-">
-
-<table
-style="
-width:100%;
-border-collapse:collapse;
-">
-
-<thead>
-
-<tr
-style="
-background:gold;
-color:black;
-">
-
-<th style="padding:15px;">User</th>
-<th>Email</th>
-<th>Plan</th>
-<th>Balance</th>
-<th>Status</th>
-<th>Action</th>
-
-</tr>
-
-</thead>
-
-<tbody id="membersTable">
-
-<tr>
-
-<td colspan="6"
-style="
-padding:30px;
-text-align:center;
-">
-
-Loading Members...
-
-</td>
-
-</tr>
-
-</tbody>
-
-</table>
-
-</div>
