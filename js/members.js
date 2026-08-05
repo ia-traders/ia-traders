@@ -86,8 +86,16 @@ shownUsers.add(data.uid);
   membersTable.innerHTML = html;
 
 }
-window.manageMember = function(id){
+window.manageMember = async function(id){
 
-  alert("Member ID: " + id);
+  document.getElementById("manageModal").style.display = "flex";
+
+  document.getElementById("memberEmail").innerHTML = "Loading...";
+
+};
+
+document.getElementById("closeModal").onclick = function(){
+
+  document.getElementById("manageModal").style.display = "none";
 
 };
