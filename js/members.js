@@ -66,7 +66,9 @@ shownUsers.add(data.uid);
         <td>${data.status || "-"}</td>
 
         <td>
-<button onclick="manageMember('${item.id}')">
+<button onclick="alert('${item.id}')">
+  Manage
+</button>
   Manage
 </button>
 </td>
