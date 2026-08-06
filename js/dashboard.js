@@ -23,8 +23,9 @@ onAuthStateChanged(auth, async (user) => {
 
     const data = item.data();
 
-    if (data.uid !== user.uid) return;
+if (data.uid !== user.uid) return;
 
+if (data.status !== "Approved") return;
     let statusColor = "#f1c40f";
 
     if (data.status === "Approved") {
