@@ -67,7 +67,7 @@ if (data.status !== "Approved") return;
     const withdrawableBalance = data.withdrawableBalance ?? 0;
 
     html += `
-      html += `
+  
 <div style="
 background:#1b1b1b;
 border:2px solid gold;
