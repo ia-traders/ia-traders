@@ -67,54 +67,75 @@ if (data.status !== "Approved") return;
     const withdrawableBalance = data.withdrawableBalance ?? 0;
 
     html += `
-      <div class="card">
+      html += `
+<div style="
+background:#1b1b1b;
+border:2px solid gold;
+border-radius:18px;
+padding:25px;
+margin-bottom:25px;
+box-shadow:0 0 15px rgba(255,215,0,.2);
+">
 
-        <h2 style="color:gold;">${planName}</h2>
+<h2 style="color:gold;text-align:center;margin-bottom:20px;">
+${planName}
+</h2>
 
-        <p><b>Email:</b> ${user.email}</p>
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:15px;">
 
-        <p><b>Investment:</b> Rs.${data.amount}</p>
+<div style="background:#111;padding:15px;border-radius:10px;">
+<b>💰 Balance</b><br>
+Rs.${withdrawableBalance}
+</div>
 
-        <p><b>Daily Profit:</b> Rs.${dailyProfit}</p>
+<div style="background:#111;padding:15px;border-radius:10px;">
+<b>📈 Total Earned</b><br>
+Rs.${totalEarned}
+</div>
 
-        <p><b>Total Earned:</b> Rs.${totalEarned}</p>
+<div style="background:#111;padding:15px;border-radius:10px;">
+<b>💵 Daily Profit</b><br>
+Rs.${dailyProfit}
+</div>
 
-        <p><b>Withdrawable Balance:</b> Rs.${withdrawableBalance}</p>
+<div style="background:#111;padding:15px;border-radius:10px;">
+<b>🟢 Status</b><br>
+<span style="color:${statusColor};font-weight:bold;">
+${data.status}
+</span>
+</div>
 
-        <p><b>Payment Method:</b> ${data.paymentMethod}</p>
+<div style="background:#111;padding:15px;border-radius:10px;">
+<b>📧 Email</b><br>
+${user.email}
+</div>
 
-        <p><b>Investment Date:</b> ${investmentDate}</p>
+<div style="background:#111;padding:15px;border-radius:10px;">
+<b>💳 Payment</b><br>
+${data.paymentMethod}
+</div>
 
-        <p>
-          <b>Status:</b>
-          <span style="color:${statusColor};font-weight:bold;">
-            ${data.status}
-          </span>
-        </p>
+</div>
 
-        <button
-          style="
-            width:100%;
-            margin-top:15px;
-            padding:12px;
-            background:gold;
-            border:none;
-            border-radius:8px;
-            font-weight:bold;
-            cursor:pointer;
-          ">
-          Withdraw
-        </button>
+<div style="margin-top:20px;background:#111;padding:15px;border-radius:10px;">
+<b>📅 Investment Date</b><br>
+${investmentDate}
+</div>
 
-      </div>
-    `;
+<button
+style="
+width:100%;
+margin-top:20px;
+padding:15px;
+background:gold;
+border:none;
+border-radius:10px;
+font-weight:bold;
+cursor:pointer;
+font-size:16px;
+">
+Withdraw
+</button>
 
-  });
-
-  if (html === "") {
-    html = "<h2>No investment request found.</h2>";
-  }
-
-  userData.innerHTML = html;
-
-});
+</div>
+`;
