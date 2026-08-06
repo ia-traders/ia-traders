@@ -10,7 +10,6 @@ import {
   getDoc
 } from "../firebase.js";
 
-
 console.log("Members JS Loaded");
 
 const membersTable = document.getElementById("membersTable");
@@ -36,21 +35,24 @@ async function loadMembers() {
     </tr>
   `;
 
- const q = query(
-  collection(db, "investmentRequests"),
-  where("status", "==", "Approved")
-);
+  const q = query(
+    collection(db, "investmentRequests"),
+    where("status", "==", "Approved")
+  );
 
-const snapshot = await getDocs(q);
-let html = "";
-const shownUsers = new Set();
-  
+  const snapshot = await getDocs(q);
+
+  let html = "";
+
+  const shownUsers = new Set();
+
   snapshot.forEach((item) => {
 
     const data = item.data();
+
     if (shownUsers.has(data.uid)) return;
 
-shownUsers.add(data.uid);
+    shownUsers.add(data.uid);
 
     html += `
       <tr>
@@ -66,12 +68,10 @@ shownUsers.add(data.uid);
         <td>${data.status || "-"}</td>
 
         <td>
-<button onclick="alert('${item.id}')">
-  Manage
-</button>
-  Manage
-</button>
-</td>
+          <button class="manage-btn" data-id="${item.id}">
+            Manage
+          </button>
+        </td>
 
       </tr>
     `;
@@ -79,6 +79,7 @@ shownUsers.add(data.uid);
   });
 
   if (html === "") {
+
     html = `
       <tr>
         <td colspan="6" style="padding:30px;text-align:center;">
@@ -86,33 +87,45 @@ shownUsers.add(data.uid);
         </td>
       </tr>
     `;
+
   }
 
-  membersTable.innerHTML = html;
+  membersTable.innerHTML = html;  document.querySelectorAll(".manage-btn").forEach((btn) => {
+
+    btn.addEventListener("click", async () => {
+
+      const id = btn.dataset.id;
+
+      const ref = doc(db, "investmentRequests", id);
+
+      const snap = await getDoc(ref);
+
+      if (!snap.exists()) {
+        alert("Member not found");
+        return;
+      }
+
+      const data = snap.data();
+
+      document.getElementById("manageModal").style.display = "flex";
+
+      document.getElementById("memberEmail").textContent =
+        data.email || "-";
+
+      document.getElementById("newBalance").value =
+        data.withdrawableBalance || 0;
+
+      document.getElementById("newEarned").value =
+        data.totalEarned || 0;
+
+    });
+
+  });
 
 }
-window.manageMember = async function(id){
 
-  const ref = doc(db, "investmentRequests", id);
+document.getElementById("closeModal").addEventListener("click", () => {
 
-  const snap = await getDoc(ref);
+  document.getElementById("manageModal").style.display = "none";
 
-  if(!snap.exists()){
-    alert("Member not found");
-    return;
-  }
-
-  const data = snap.data();
-
-  document.getElementById("manageModal").style.display = "flex";
-
-  document.getElementById("memberEmail").innerHTML =
-    data.email;
-
-  document.getElementById("newBalance").value =
-    data.withdrawableBalance || 0;
-
-  document.getElementById("newEarned").value =
-    data.totalEarned || 0;
-
-};
+});
