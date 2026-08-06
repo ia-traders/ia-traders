@@ -100,14 +100,26 @@ shownUsers.add(data.uid);
 }
 window.manageMember = async function(id){
 
+  const ref = doc(db, "investmentRequests", id);
+
+  const snap = await getDoc(ref);
+
+  if(!snap.exists()){
+    alert("Member not found");
+    return;
+  }
+
+  const data = snap.data();
+
   document.getElementById("manageModal").style.display = "flex";
 
-  document.getElementById("memberEmail").innerHTML = "Loading...";
+  document.getElementById("memberEmail").innerHTML =
+    data.email;
 
-};
+  document.getElementById("newBalance").value =
+    data.withdrawableBalance || 0;
 
-document.getElementById("closeModal").onclick = function(){
-
-  document.getElementById("manageModal").style.display = "none";
+  document.getElementById("newEarned").value =
+    data.totalEarned || 0;
 
 };
