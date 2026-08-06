@@ -10,19 +10,10 @@ import {
   getDoc
 } from "../firebase.js";
 
+
 console.log("Members JS Loaded");
-console.log("Members JS Loaded");
-
-window.addEventListener("DOMContentLoaded", () => {
-
-  const membersTable = document.getElementById("membersTable");
-
-  console.log("membersTable =", membersTable);
-
-});
 
 const membersTable = document.getElementById("membersTable");
-console.log("membersTable =", membersTable);
 
 onAuthStateChanged(auth, async (user) => {
 
