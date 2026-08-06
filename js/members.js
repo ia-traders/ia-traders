@@ -5,7 +5,9 @@ import {
   collection,
   getDocs,
   query,
-  where
+  where,
+  doc,
+  getDoc
 } from "../firebase.js";
 
 console.log("Members JS Loaded");
