@@ -1,71 +1,211 @@
-<!-- Manage Member Popup -->
+<!DOCTYPE html>
+<html lang="en">
 
-<div id="manageModal"
-style="
-display:none;
-position:fixed;
-left:0;
-top:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,.75);
-justify-content:center;
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Members | IA Traders Admin</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#0f0f0f;
+color:white;
+display:flex;
+min-height:100vh;
+}
+
+.sidebar{
+width:260px;
+background:#181818;
+border-right:2px solid gold;
+padding:20px;
+}
+
+.logo{
+font-size:28px;
+font-weight:bold;
+color:gold;
+text-align:center;
+margin-bottom:40px;
+}
+
+.menu a{
+display:flex;
 align-items:center;
-z-index:999;
-">
+gap:15px;
+text-decoration:none;
+color:white;
+padding:15px;
+margin-bottom:10px;
+border-radius:10px;
+transition:.3s;
+}
 
-<div
-style="
-width:450px;
+.menu a:hover{
+background:gold;
+color:black;
+}
+
+.main{
+flex:1;
+padding:30px;
+}
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+}
+
+.header h1{
+color:gold;
+}
+
+.search-box{
+margin-bottom:25px;
+}
+
+.search-box input{
+width:100%;
+padding:14px;
+border-radius:10px;
+border:2px solid gold;
+background:#1b1b1b;
+color:white;
+font-size:16px;
+outline:none;
+}
+
+.table-box{
 background:#1b1b1b;
 border:2px solid gold;
 border-radius:15px;
-padding:25px;
-">
+overflow:hidden;
+}
 
-<h2 style="color:gold;margin-bottom:20px;">
-Manage Member
-</h2>
-
-<p id="memberEmail"></p>
-
-<label>Balance</label>
-
-<input
-id="newBalance"
-type="number"
-style="
+table{
 width:100%;
-padding:12px;
-margin:10px 0 20px;
-">
+border-collapse:collapse;
+}
 
-<label>Total Earned</label>
+thead{
+background:gold;
+color:black;
+}
 
-<input
-id="newEarned"
-type="number"
-style="
-width:100%;
-padding:12px;
-margin:10px 0 20px;
-">
+th,td{
+padding:15px;
+text-align:center;
+border-bottom:1px solid #333;
+}
 
-<button id="saveMember">
-Save Changes
-</button>
+button{
+padding:10px 16px;
+background:gold;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold;
+}
 
-<button
-id="closeModal"
-style="background:red;color:white;">
-Close
-</button>
+button:hover{
+background:#2ecc71;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<div class="logo">
+IA Traders
+</div>
+
+<div class="menu">
+
+<a href="admin-dashboard.html">
+<i class="fas fa-house"></i>
+Dashboard
+</a>
+
+<a href="members.html">
+<i class="fas fa-users"></i>
+Members
+</a>
+
+<a href="#">
+<i class="fas fa-money-bill-wave"></i>
+Deposits
+</a>
+
+<a href="#">
+<i class="fas fa-wallet"></i>
+Withdraws
+</a>
 
 </div>
 
 </div>
 
-<script type="module" src="js/members.js"></script>
+<div class="main">
 
-</body>
-</html>
+<div class="header">
+<h1>Members</h1>
+</div>
+
+<div class="search-box">
+
+<input
+type="text"
+id="searchMember"
+placeholder="Search by Name or Email...">
+
+</div>
+
+<div class="table-box">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>User</th>
+<th>Email</th>
+<th>Plan</th>
+<th>Balance</th>
+<th>Status</th>
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody id="membersTable">
+
+<tr>
+
+<td colspan="6">
+
+Loading Members...
+
+</td>
+
+</tr>
