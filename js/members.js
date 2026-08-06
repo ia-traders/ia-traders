@@ -144,8 +144,11 @@ async function loadMembers() {
 
   });
 
-}document.getElementById("closeModal").addEventListener("click", () => {
+document.getElementById("saveMember").onclick = async function () {
 
+  alert("Save button clicked");
+
+};
   document.getElementById("manageModal").style.display = "none";
 
 });
