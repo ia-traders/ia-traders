@@ -11,6 +11,7 @@ import {
 console.log("Members JS Loaded");
 
 const membersTable = document.getElementById("membersTable");
+console.log("membersTable =", membersTable);
 
 onAuthStateChanged(auth, async (user) => {
 
