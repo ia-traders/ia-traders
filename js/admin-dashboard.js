@@ -187,3 +187,13 @@ async function loadDashboard(){
 
 
 }
+import { signOut } from "../firebase.js";
+
+
+document.getElementById("logoutBtn").onclick = async ()=>{
+
+    await signOut(auth);
+
+    location.href = "login.html";
+
+};
