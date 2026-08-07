@@ -14,22 +14,27 @@ import {
 console.log("Members JS Loaded");
 
 const membersTable = document.getElementById("membersTable");
+const manageModal = document.getElementById("manageModal");
+const memberEmail = document.getElementById("memberEmail");
+const newBalance = document.getElementById("newBalance");
+const newEarned = document.getElementById("newEarned");
+const saveMember = document.getElementById("saveMember");
+const closeModal = document.getElementById("closeModal");
+const searchMember = document.getElementById("searchMember");
 
 let currentMemberId = "";
+let allMembers = [];
 
-onAuthStateChanged(auth, async (user) => {
-
+onAuthStateChanged(auth, (user) => {
   if (!user) {
     location.href = "login.html";
     return;
   }
 
   loadMembers();
-
 });
 
 async function loadMembers() {
-
   membersTable.innerHTML = `
     <tr>
       <td colspan="6" style="padding:30px;text-align:center;">
@@ -38,51 +43,81 @@ async function loadMembers() {
     </tr>
   `;
 
-  const q = query(
-    collection(db, "investmentRequests"),
-    where("status", "==", "Approved")
-  );
+  try {
+    const q = query(
+      collection(db, "investmentRequests"),
+      where("status", "==", "Approved")
+    );
 
-  const snapshot = await getDocs(q);
+    const snapshot = await getDocs(q);
+
+    const shownUsers = new Set();
+    allMembers = [];
+
+    snapshot.forEach((item) => {
+      const data = item.data();
+
+      if (!data.uid) return;
+
+      if (shownUsers.has(data.uid)) return;
+
+      shownUsers.add(data.uid);
+
+      allMembers.push({
+        id: item.id,
+        ...data
+      });
+    });
+
+    renderMembers(allMembers);
+
+  } catch (err) {
+    console.error(err);
+
+    membersTable.innerHTML = `
+      <tr>
+        <td colspan="6" style="padding:30px;text-align:center;color:red;">
+          Error Loading Members
+        </td>
+      </tr>
+    `;
+  }
+}
+
+function renderMembers(list) {
+
+  if (list.length === 0) {
+    membersTable.innerHTML = `
+      <tr>
+        <td colspan="6" style="padding:30px;text-align:center;">
+          No Members Found
+        </td>
+      </tr>
+    `;
+    return;
+  }
 
   let html = "";
 
-  const shownUsers = new Set();
-
-  snapshot.forEach((item) => {
-
-    const data = item.data();
-
-    if (shownUsers.has(data.uid)) return;
-
-    shownUsers.add(data.uid);
+  list.forEach((member) => {
 
     html += `
       <tr>
 
-        <td style="padding:15px;">
-          ${data.senderName || "-"}
-        </td>
+        <td>${member.senderName || "-"}</td>
+
+        <td>${member.email || "-"}</td>
+
+        <td>${member.planName || "-"}</td>
+
+        <td>Rs.${member.withdrawableBalance || 0}</td>
+
+        <td>${member.status || "-"}</td>
 
         <td>
-          ${data.email || "-"}
-        </td>
-
-        <td>
-          ${data.planName || "-"}
-        </td>
-
-        <td>
-          Rs.${data.withdrawableBalance || 0}
-        </td>
-
-        <td>
-          ${data.status || "-"}
-        </td>
-
-        <td>
-          <button class="manage-btn"
-                  data-id="${item.id}">
+          <button
+            class="manage-btn"
+            data-id="${member.id}">
             Manage
           </button>
         </td>
@@ -92,68 +127,45 @@ async function loadMembers() {
 
   });
 
-  if (html === "") {
-
-    html = `
-      <tr>
-        <td colspan="6"
-            style="padding:30px;text-align:center;">
-          No Members Found
-        </td>
-      </tr>
-    `;
-
-  }
-
   membersTable.innerHTML = html;
 
   document.querySelectorAll(".manage-btn").forEach((btn) => {
 
     btn.addEventListener("click", async () => {
 
-      const id = btn.dataset.id;
+      try {
 
-      currentMemberId = id;
+        currentMemberId = btn.dataset.id;
 
-      const ref = doc(db, "investmentRequests", id);
+        const ref = doc(db, "investmentRequests", currentMemberId);
 
-      const snap = await getDoc(ref);
+        const snap = await getDoc(ref);
 
-      if (!snap.exists()) {
+        if (!snap.exists()) {
+          alert("Member not found.");
+          return;
+        }
 
-        alert("Member not found");
+        const data = snap.data();
 
-        return;
+        memberEmail.textContent = data.email || "-";
+        newBalance.value = data.withdrawableBalance || 0;
+        newEarned.value = data.totalEarned || 0;
 
+        manageModal.style.display = "flex";
+
+      } catch (err) {
+        console.error(err);
+        alert("Failed to load member.");
       }
-
-      const data = snap.data();
-
-      document.getElementById("manageModal").style.display = "flex";
-
-      document.getElementById("memberEmail").textContent =
-        data.email || "-";
-
-      document.getElementById("newBalance").value =
-        data.withdrawableBalance || 0;
-
-      document.getElementById("newEarned").value =
-        data.totalEarned || 0;
 
     });
 
   });
 
-document.getElementById("saveMember").onclick = async function () {
+}
 
-  alert("Save button clicked");
-
-};
-  document.getElementById("manageModal").style.display = "none";
-
-});
-
-document.getElementById("saveMember").addEventListener("click", async () => {
+saveMember.addEventListener("click", async () => {
 
   if (!currentMemberId) {
     alert("No member selected.");
@@ -165,30 +177,62 @@ document.getElementById("saveMember").addEventListener("click", async () => {
     await updateDoc(
       doc(db, "investmentRequests", currentMemberId),
       {
-        withdrawableBalance: Number(
-          document.getElementById("newBalance").value
-        ),
-
-        totalEarned: Number(
-          document.getElementById("newEarned").value
-        )
+        withdrawableBalance: Number(newBalance.value),
+        totalEarned: Number(newEarned.value)
       }
     );
 
     alert("Member updated successfully.");
 
-    document.getElementById("manageModal").style.display = "none";
+    manageModal.style.display = "none";
 
     currentMemberId = "";
 
     loadMembers();
 
-  } catch (error) {
+  } catch (err) {
 
-    console.error(error);
+    console.error(err);
 
     alert("Error updating member.");
 
   }
+
+});
+
+closeModal.addEventListener("click", () => {
+
+  manageModal.style.display = "none";
+
+  currentMemberId = "";
+
+});
+
+window.addEventListener("click", (e) => {
+
+  if (e.target === manageModal) {
+    manageModal.style.display = "none";
+    currentMemberId = "";
+  }
+
+});
+
+searchMember.addEventListener("input", () => {
+
+  const value = searchMember.value.toLowerCase().trim();
+
+  const filtered = allMembers.filter((member) => {
+
+    const name = (member.senderName || "").toLowerCase();
+    const email = (member.email || "").toLowerCase();
+
+    return (
+      name.includes(value) ||
+      email.includes(value)
+    );
+
+  });
+
+  renderMembers(filtered);
 
 });
