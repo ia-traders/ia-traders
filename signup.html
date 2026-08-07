@@ -80,7 +80,17 @@ button:hover{
 <button id="signupBtn">
 Signup
 </button>
-
+<p style="margin-top:20px;color:#ccc;">
+Already have an account?
+<a href="login.html"
+style="
+color:gold;
+text-decoration:none;
+font-weight:bold;
+">
+Login
+</a>
+</p>
 
 </div>
 
@@ -147,10 +157,7 @@ createdAt:new Date()
 
 alert("Account Created Successfully");
 
-
-
-}
-
+window.location.href = "login.html";
 
 catch(error){
 
