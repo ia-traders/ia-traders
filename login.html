@@ -71,7 +71,18 @@ button{
 <button id="loginBtn">
 Login
 </button>
-
+<p style="margin-top:20px;color:#ccc;">
+Don't have an account?
+<a href="signup.html"
+style="
+color:gold;
+text-decoration:none;
+font-weight:bold;
+">
+Sign Up
+</a>
+</p>
+    
 </div>
 
 
@@ -120,8 +131,7 @@ alert("Login Successful");
 // Admin ko admin panel bhejna
 if(userCredential.user.email === "irfanali555567@gmail.com"){
 
-    window.location.href = "admin.html";
-
+window.location.href = "admin-dashboard.html";
 }
 
 // Normal user ko new dashboard
