@@ -4,15 +4,13 @@ import {
   onAuthStateChanged,
   collection,
   getDocs,
-  doc,
-  updateDoc
+  query,
+  where
 } from "../firebase.js";
-
-const requestsDiv = document.getElementById("requests");
 
 const ADMIN_EMAIL = "irfanali555567@gmail.com";
 
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
 
   if (!user) {
     location.href = "login.html";
@@ -25,173 +23,97 @@ onAuthStateChanged(auth, (user) => {
     return;
   }
 
-  loadRequests();
+  loadDashboard();
 
 });
 
-async function loadRequests() {
+async function loadDashboard() {
 
-  requestsDiv.innerHTML = `
-  <h2 style="color:gold;">Investment Requests</h2>
-  `;
+  // Cards
+  const totalMembers = document.getElementById("totalMembers");
+  const pendingDeposits = document.getElementById("pendingDeposits");
+  const pendingWithdraws = document.getElementById("pendingWithdraws");
+  const activePlans = document.getElementById("activePlans");
+  const recentActivity = document.getElementById("recentActivity");
 
-  const investmentSnapshot = await getDocs(
+  // ----------------------------
+  // Investment Requests
+  // ----------------------------
+
+  const investmentSnap = await getDocs(
     collection(db, "investmentRequests")
   );
 
-  investmentSnapshot.forEach((item) => {
+  let members = 0;
+  let pendingDeposit = 0;
+  let active = 0;
 
-    const data = item.data();
+  let activityHTML = "";
 
-    requestsDiv.innerHTML += `
+  investmentSnap.forEach(doc => {
 
-    <div class="request">
+    const data = doc.data();
 
-      <h3 style="color:gold;">Investment Request</h3>
+    if (data.status === "Approved") {
+      members++;
+      active++;
+    }
 
-      <p><b>Email:</b> ${data.email}</p>
+    if (data.status === "Pending") {
+      pendingDeposit++;
+    }
 
-      <p><b>Plan:</b> Rs.${data.plan}</p>
-
-      <p><b>Amount:</b> Rs.${data.amount}</p>
-
-      <p><b>Sender Name:</b> ${data.senderName}</p>
-
-      <p><b>Sender Number:</b> ${data.senderNumber}</p>
-
-      <p><b>Status:</b> ${data.status}</p>
-
-      <button onclick="approveRequest('${item.id}')">
-      Approve
-      </button>
-
-      <button class="reject" onclick="rejectRequest('${item.id}')">
-      Reject
-      </button>
-
-    </div>
-
-    `;
-
-  });  // ==========================
-  // Withdraw Requests
-  // ==========================
-
-  requestsDiv.innerHTML += `
-    <hr style="margin:40px 0;border-color:gold;">
-    <h2 style="color:#2ecc71;">Withdraw Requests</h2>
-  `;
-
-  const withdrawSnapshot = await getDocs(
-    collection(db, "withdrawRequests")
-  );
-
-  withdrawSnapshot.forEach((item) => {
-
-    const data = item.data();
-
-    requestsDiv.innerHTML += `
-
-    <div class="request">
-
-      <h3 style="color:#2ecc71;">Withdraw Request</h3>
-
-      <p><b>Email:</b> ${data.email}</p>
-
-      <p><b>Amount:</b> Rs.${data.amount}</p>
-
-      <p><b>Payment Method:</b> ${data.paymentMethod}</p>
-
-      <p><b>Account:</b> ${data.account}</p>
-
-      <p><b>Status:</b> ${data.status}</p>
-
-      <button onclick="approveWithdraw('${item.id}')">
-        Approve
-      </button>
-
-      <button class="reject" onclick="rejectWithdraw('${item.id}')">
-        Reject
-      </button>
-
-    </div>
-
+    activityHTML += `
+      <div style="
+        background:#111;
+        padding:15px;
+        border-radius:10px;
+        margin-bottom:10px;
+      ">
+        <b>${data.email}</b><br>
+        ${data.planName} - ${data.status}
+      </div>
     `;
 
   });
 
-}// =====================================
-// Investment Approve
-// =====================================
+  // ----------------------------
+  // Withdraw Requests
+  // ----------------------------
 
-window.approveRequest = async function(id){
-
-  await updateDoc(
-    doc(db, "investmentRequests", id),
-    {
-      status: "Approved"
-    }
+  const withdrawSnap = await getDocs(
+    collection(db, "withdrawRequests")
   );
 
-  alert("Investment Approved");
+  let pendingWithdraw = 0;
 
-  loadRequests();
+  withdrawSnap.forEach(doc => {
 
-};
+    const data = doc.data();
 
-
-// =====================================
-// Investment Reject
-// =====================================
-
-window.rejectRequest = async function(id){
-
-  await updateDoc(
-    doc(db, "investmentRequests", id),
-    {
-      status: "Rejected"
+    if (data.status === "Pending") {
+      pendingWithdraw++;
     }
-  );
 
-  alert("Investment Rejected");
+  });
 
-  loadRequests();
+  // ----------------------------
+  // Set Dashboard Values
+  // ----------------------------
 
-};// =====================================
-// Withdraw Approve
-// =====================================
+  totalMembers.textContent = members;
 
-window.approveWithdraw = async function(id){
+  pendingDeposits.textContent = pendingDeposit;
 
-  await updateDoc(
-    doc(db, "withdrawRequests", id),
-    {
-      status: "Approved"
-    }
-  );
+  pendingWithdraws.textContent = pendingWithdraw;
 
-  alert("Withdraw Approved");
+  activePlans.textContent = active;
 
-  loadRequests();
+  if (activityHTML === "") {
+    activityHTML =
+      "<p style='color:#999;'>No recent activity.</p>";
+  }
 
-};
+  recentActivity.innerHTML = activityHTML;
 
-
-// =====================================
-// Withdraw Reject
-// =====================================
-
-window.rejectWithdraw = async function(id){
-
-  await updateDoc(
-    doc(db, "withdrawRequests", id),
-    {
-      status: "Rejected"
-    }
-  );
-
-  alert("Withdraw Rejected");
-
-  loadRequests();
-
-};
+}
