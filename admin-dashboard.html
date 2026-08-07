@@ -111,20 +111,18 @@ IA Traders
 
 <div class="menu">
 
-<a href="deposit-requests.html">
-<i class="fas fa-money-bill-wave"></i>
-Deposit Requests
-</a>
+
 
 <a href="members.html">
 <i class="fas fa-users"></i>
 Members
 </a>
-
-<a href="#">
+<a href="deposit-requests.html">
 <i class="fas fa-money-bill-wave"></i>
 Deposit Requests
 </a>
+
+    
 
 <a href="#">
 <i class="fas fa-wallet"></i>
@@ -418,7 +416,15 @@ gap:15px;
 </style>
 
 </div>
+<script>
+document.getElementById("depositBtn").onclick = function () {
+    window.location.href = "deposit-requests.html";
+};
+</script>
 
+<script type="module" src="js/admin.js"></script>
+
+    
 <script type="module" src="js/admin.js"></script>
 
 </body>
