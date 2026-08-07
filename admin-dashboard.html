@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -25,10 +24,6 @@ color:white;
 display:flex;
 min-height:100vh;
 }
-
-/* ===========================
-SIDEBAR
-=========================== */
 
 .sidebar{
 width:260px;
@@ -68,10 +63,6 @@ width:25px;
 text-align:center;
 }
 
-/* ===========================
-MAIN AREA
-=========================== */
-
 .main{
 flex:1;
 padding:30px;
@@ -95,13 +86,119 @@ border-radius:10px;
 border:1px solid gold;
 }
 
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+margin-bottom:35px;
+}
+
+.card{
+background:#1b1b1b;
+border:2px solid gold;
+border-radius:15px;
+padding:25px;
+text-align:center;
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
+}
+
+.card i{
+font-size:40px;
+color:gold;
+margin-bottom:15px;
+}
+
+.card h2{
+font-size:32px;
+margin-bottom:8px;
+color:#2ecc71;
+}
+
+.card p{
+color:#ccc;
+}
+
+.content-box{
+background:#1b1b1b;
+border:2px solid gold;
+border-radius:15px;
+padding:25px;
+margin-top:25px;
+}
+
+.quick-actions{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:20px;
+}
+
+.quick-actions button{
+padding:18px;
+font-size:16px;
+font-weight:bold;
+background:gold;
+color:#000;
+border:none;
+border-radius:12px;
+cursor:pointer;
+transition:.3s;
+}
+
+.quick-actions button:hover{
+background:#2ecc71;
+transform:scale(1.05);
+}
+
+@media(max-width:900px){
+
+body{
+flex-direction:column;
+}
+
+.sidebar{
+width:100%;
+border-right:none;
+border-bottom:2px solid gold;
+}
+
+.menu{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+}
+
+.main{
+padding:20px;
+}
+
+}
+
+@media(max-width:600px){
+
+.cards{
+grid-template-columns:1fr;
+}
+
+.quick-actions{
+grid-template-columns:1fr;
+}
+
+.header{
+flex-direction:column;
+gap:15px;
+}
+
+}
+
 </style>
 
 </head>
 
 <body>
-
-<!-- Sidebar -->
 
 <div class="sidebar">
 
@@ -111,20 +208,17 @@ IA Traders
 
 <div class="menu">
 
-
-
 <a href="members.html">
 <i class="fas fa-users"></i>
 Members
 </a>
+
 <a href="deposit-requests.html">
 <i class="fas fa-money-bill-wave"></i>
 Deposit Requests
 </a>
 
-    
-
-<a href="#">
+<a href="deposit-requests.html">
 <i class="fas fa-wallet"></i>
 Withdraw Requests
 </a>
@@ -148,8 +242,6 @@ Logout
 
 </div>
 
-<!-- Main -->
-
 <div class="main">
 
 <div class="header">
@@ -157,46 +249,38 @@ Logout
 <h1>Admin Dashboard</h1>
 
 <div class="admin-info">
-
 Administrator
-
 </div>
 
-</div><!-- ===========================
-DASHBOARD CARDS
-=========================== -->
+</div>
 
 <div class="cards">
 
 <div class="card">
-    <i class="fas fa-users"></i>
-    <h2 id="totalMembers">0</h2>
-    <p>Total Members</p>
+<i class="fas fa-users"></i>
+<h2 id="totalMembers">0</h2>
+<p>Total Members</p>
 </div>
 
 <div class="card">
-    <i class="fas fa-money-bill-wave"></i>
-    <h2 id="pendingDeposits">0</h2>
-    <p>Pending Deposits</p>
+<i class="fas fa-money-bill-wave"></i>
+<h2 id="pendingDeposits">0</h2>
+<p>Pending Deposits</p>
 </div>
 
 <div class="card">
-    <i class="fas fa-wallet"></i>
-    <h2 id="pendingWithdraws">0</h2>
-    <p>Pending Withdrawals</p>
+<i class="fas fa-wallet"></i>
+<h2 id="pendingWithdraws">0</h2>
+<p>Pending Withdrawals</p>
 </div>
 
 <div class="card">
-    <i class="fas fa-chart-line"></i>
-    <h2 id="activePlans">0</h2>
-    <p>Active Plans</p>
+<i class="fas fa-chart-line"></i>
+<h2 id="activePlans">0</h2>
+<p>Active Plans</p>
 </div>
 
 </div>
-
-<!-- ===========================
-CONTENT AREA
-=========================== -->
 
 <div class="content-box">
 
@@ -205,85 +289,14 @@ Recent Activity
 </h2>
 
 <div id="recentActivity">
-
 <p style="color:#999;">
 Loading data...
 </p>
-
 </div>
 
 </div>
 
-<style>
-
-/* ===========================
-CARDS
-=========================== */
-
-.cards{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:20px;
-margin-bottom:35px;
-}
-
-.card{
-
-background:#1b1b1b;
-border:2px solid gold;
-border-radius:15px;
-padding:25px;
-text-align:center;
-transition:.3s;
-
-}
-
-.card:hover{
-
-transform:translateY(-5px);
-
-}
-
-.card i{
-
-font-size:40px;
-color:gold;
-margin-bottom:15px;
-
-}
-
-.card h2{
-
-font-size:32px;
-margin-bottom:8px;
-color:#2ecc71;
-
-}
-
-.card p{
-
-color:#ccc;
-
-}
-
-/* ===========================
-CONTENT BOX
-=========================== */
-
-.content-box{
-
-background:#1b1b1b;
-border:2px solid gold;
-border-radius:15px;
-padding:25px;
-
-}
-
-</style><!-- ===========================
-QUICK ACTIONS
-=========================== -->
-
-<div class="content-box" style="margin-top:25px;">
+<div class="content-box">
 
 <h2 style="color:gold;margin-bottom:20px;">
 Quick Actions
@@ -291,141 +304,16 @@ Quick Actions
 
 <div class="quick-actions">
 
-<button id="membersBtn">
-👥 Members
-</button>
+<button id="membersBtn">👥 Members</button>
 
-<button id="depositBtn">
-💰 Deposits
-</button>
+<button id="depositBtn">💰 Deposits</button>
 
-<button id="withdrawBtn">
-💸 Withdraws
-</button>
+<button id="withdrawBtn">💸 Withdraws</button>
 
-<button id="transactionBtn">
-📊 Transactions
-</button>
+<button id="transactionBtn">📊 Transactions</button>
 
-<button id="settingsBtn">
-⚙ Settings
-</button>
+<button id="settingsBtn">⚙ Settings</button>
 
 </div>
 
 </div>
-
-<style>
-
-/* ===========================
-QUICK ACTIONS
-=========================== */
-
-.quick-actions{
-
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-gap:20px;
-
-}
-
-.quick-actions button{
-
-padding:18px;
-font-size:16px;
-font-weight:bold;
-
-background:gold;
-color:#000;
-
-border:none;
-border-radius:12px;
-
-cursor:pointer;
-
-transition:.3s;
-
-}
-
-.quick-actions button:hover{
-
-background:#2ecc71;
-transform:scale(1.05);
-
-}
-
-/* ===========================
-RESPONSIVE
-=========================== */
-
-@media(max-width:900px){
-
-body{
-
-flex-direction:column;
-
-}
-
-.sidebar{
-
-width:100%;
-border-right:none;
-border-bottom:2px solid gold;
-
-}
-
-.menu{
-
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:10px;
-
-}
-
-.main{
-
-padding:20px;
-
-}
-
-}
-
-@media(max-width:600px){
-
-.cards{
-
-grid-template-columns:1fr;
-
-}
-
-.quick-actions{
-
-grid-template-columns:1fr;
-
-}
-
-.header{
-
-flex-direction:column;
-gap:15px;
-
-}
-
-}
-
-</style>
-
-</div>
-<script>
-document.getElementById("depositBtn").onclick = function () {
-    window.location.href = "deposit-requests.html";
-};
-</script>
-
-<script type="module" src="js/admin.js"></script>
-
-    
-<script type="module" src="js/admin.js"></script>
-
-</body>
-</html>
