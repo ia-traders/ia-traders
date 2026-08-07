@@ -1,1 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Settings | IA Traders Admin</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#0f0f0f;
+color:white;
+display:flex;
+min-height:100vh;
+}
+
+
+.sidebar{
+
+width:260px;
+background:#181818;
+border-right:2px solid gold;
+padding:20px;
+
+}
+
+
+.logo{
+
+font-size:28px;
+font-weight:bold;
+color:gold;
+text-align:center;
+margin-bottom:40px;
+
+}
+
+
+.menu a{
+
+display:flex;
+align-items:center;
+gap:15px;
+text-decoration:none;
+color:white;
+padding:15px;
+margin-bottom:10px;
+border-radius:10px;
+
+}
+
+
+.menu a:hover{
+
+background:gold;
+color:black;
+
+}
+
+
+
+.main{
+
+flex:1;
+padding:30px;
+
+}
+
+
+
+h1{
+
+color:gold;
+margin-bottom:30px;
+
+}
+
+
+
+.box{
+
+background:#1b1b1b;
+border:2px solid gold;
+border-radius:15px;
+padding:25px;
+max-width:500px;
+
+}
+
+
+
+.box p{
+
+margin:15px 0;
+font-size:18px;
+
+}
+
+
+
+button{
+
+background:gold;
+border:none;
+padding:12px 25px;
+border-radius:10px;
+font-weight:bold;
+cursor:pointer;
+
+}
+
+
+
+button:hover{
+
+background:#2ecc71;
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="sidebar">
+
+
+<div class="logo">
+IA Traders
+</div>
+
+
+<div class="menu">
+
+
+<a href="admin-dashboard.html">
+<i class="fas fa-house"></i>
+Dashboard
+</a>
+
+
+<a href="members.html">
+<i class="fas fa-users"></i>
+Members
+</a>
+
+
+<a href="deposit-requests.html">
+<i class="fas fa-money-bill"></i>
+Deposits
+</a>
+
+
+<a href="transactions.html">
+<i class="fas fa-chart-line"></i>
+Transactions
+</a>
+
+
+<a href="settings.html">
+<i class="fas fa-gear"></i>
+Settings
+</a>
+
+
+</div>
+
+
+</div>
+
+
+
+<div class="main">
+
+
+<h1>
+Admin Settings
+</h1>
+
+
+
+<div class="box">
+
+
+<p>
+<b>Admin Email:</b>
+<br>
+<span id="adminEmail">
+Loading...
+</span>
+</p>
+
+
+
+<p>
+<b>Account Status:</b>
+<br>
+Active
+</p>
+
+
+
+<button id="logoutBtn">
+Logout
+</button>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+<script type="module" src="js/settings.js"></script>
+
+
+</body>
+
+</html>
