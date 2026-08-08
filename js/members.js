@@ -29,33 +29,58 @@ let currentMemberId = "";
 let currentMemberSource = "";
 let allMembers = [];
 
+
+/* =========================
+   AUTH CHECK
+========================= */
+
 onAuthStateChanged(auth, async (user) => {
 
   if (!user) {
-    location.href = "login.html";
+    window.location.href = "login.html";
     return;
   }
 
   if (user.email !== ADMIN_EMAIL) {
+
     document.body.innerHTML =
       "<h1 style='color:red;text-align:center;margin-top:50px;'>Access Denied</h1>";
+
     return;
   }
 
-  loadMembers();
+  await loadMembers();
+
 });
 
+
+/* =========================
+   LOAD MEMBERS
+========================= */
 
 async function loadMembers() {
 
   membersTable.innerHTML =
-    "<tr><td colspan='6' style='padding:30px;text-align:center;'>Loading Members...</td></tr>";
+    "<tr>" +
+    "<td colspan='6' style='padding:30px;text-align:center;'>" +
+    "Loading Members..." +
+    "</td>" +
+    "</tr>";
 
   try {
+
+    /*
+      Get ALL registered users
+    */
 
     const usersSnapshot = await getDocs(
       collection(db, "users")
     );
+
+
+    /*
+      Get approved investments
+    */
 
     const investmentQuery = query(
       collection(db, "investmentRequests"),
@@ -66,41 +91,56 @@ async function loadMembers() {
       investmentQuery
     );
 
-    const investments = new Map();
+
+    /*
+      Store investments by UID
+    */
+
+    const investmentMap = new Map();
 
     investmentSnapshot.forEach((item) => {
 
       const data = item.data();
 
       if (data.uid) {
-        investments.set(data.uid, {
-          id: item.id,
-          ...data
-        });
+
+        investmentMap.set(
+          data.uid,
+          {
+            id: item.id,
+            data: data
+          }
+        );
+
       }
 
     });
 
+
+    /*
+      Create members list
+    */
+
     allMembers = [];
+
 
     usersSnapshot.forEach((item) => {
 
       const userData = item.data();
+
       const uid = item.id;
 
-      const investment = investments.get(uid);
+      const investment =
+        investmentMap.get(uid);
 
-      allMembers.push({
+
+      let member = {
 
         userId: uid,
 
-        investmentId: investment
-          ? investment.id
-          : "",
+        investmentId: "",
 
-        source: investment
-          ? "investmentRequests"
-          : "users",
+        source: "users",
 
         name:
           userData.name ||
@@ -112,57 +152,102 @@ async function loadMembers() {
           "-",
 
         plan:
-          investment
-            ? (
-                investment.planName ||
-                ("Rs." + (investment.plan || 0))
-              )
-            : "No Investment",
+          "No Investment",
 
         balance:
-          investment
-            ? (investment.withdrawableBalance || 0)
-            : (userData.withdrawableBalance || 0),
+          userData.withdrawableBalance || 0,
 
         earned:
-          investment
-            ? (investment.totalEarned || 0)
-            : (userData.totalEarned || 0),
+          userData.totalEarned || 0,
 
         status:
-          investment
-            ? "Approved"
-            : "No Investment"
+          "No Investment"
 
-      });
+      };
+
+
+      /*
+        If user has approved investment
+      */
+
+      if (investment) {
+
+        const data = investment.data;
+
+        member.investmentId =
+          investment.id;
+
+        member.source =
+          "investmentRequests";
+
+        member.plan =
+          data.planName ||
+          (
+            data.plan
+              ? "Rs." + data.plan
+              : "Investment Plan"
+          );
+
+        member.balance =
+          data.withdrawableBalance || 0;
+
+        member.earned =
+          data.totalEarned || 0;
+
+        member.status =
+          data.status || "Approved";
+
+      }
+
+
+      allMembers.push(member);
 
     });
 
+
     renderMembers(allMembers);
+
 
   } catch (error) {
 
-    console.error("Members Error:", error);
+    console.error(
+      "Members Loading Error:",
+      error
+    );
 
     membersTable.innerHTML =
-      "<tr><td colspan='6' style='padding:30px;text-align:center;color:red;'>Error Loading Members</td></tr>";
+      "<tr>" +
+      "<td colspan='6' style='padding:30px;text-align:center;color:red;'>" +
+      "Error Loading Members" +
+      "</td>" +
+      "</tr>";
 
   }
 
 }
 
 
+/* =========================
+   SHOW MEMBERS
+========================= */
+
 function renderMembers(list) {
 
   if (list.length === 0) {
 
     membersTable.innerHTML =
-      "<tr><td colspan='6' style='padding:30px;text-align:center;'>No Members Found</td></tr>";
+      "<tr>" +
+      "<td colspan='6' style='padding:30px;text-align:center;'>" +
+      "No Members Found" +
+      "</td>" +
+      "</tr>";
 
     return;
   }
 
+
   let html = "";
+
 
   list.forEach((member) => {
 
@@ -214,110 +299,183 @@ function renderMembers(list) {
 
   });
 
+
   membersTable.innerHTML = html;
 
 
-  document
-    .querySelectorAll(".manage-btn")
-    .forEach((button) => {
+  /*
+    Manage buttons
+  */
 
-      button.addEventListener(
-        "click",
-        function () {
-          openMember(this);
-        }
-      );
+  const buttons =
+    document.querySelectorAll(
+      ".manage-btn"
+    );
 
-    });
+
+  buttons.forEach((button) => {
+
+    button.addEventListener(
+      "click",
+      function () {
+
+        openMember(this);
+
+      }
+    );
+
+  });
 
 }
 
+
+/* =========================
+   OPEN MEMBER
+========================= */
 
 async function openMember(button) {
 
   try {
 
     const userId =
-      button.getAttribute("data-user-id");
+      button.getAttribute(
+        "data-user-id"
+      );
 
     const investmentId =
-      button.getAttribute("data-investment-id");
+      button.getAttribute(
+        "data-investment-id"
+      );
 
     const source =
-      button.getAttribute("data-source");
+      button.getAttribute(
+        "data-source"
+      );
 
 
     let data = {};
 
+
+    /*
+      Investment member
+    */
 
     if (
       source === "investmentRequests" &&
       investmentId
     ) {
 
-      currentMemberId = investmentId;
-      currentMemberSource = "investmentRequests";
+      currentMemberId =
+        investmentId;
 
-      const snapshot = await getDoc(
-        doc(
-          db,
-          "investmentRequests",
-          investmentId
-        )
-      );
+      currentMemberSource =
+        "investmentRequests";
+
+
+      const snapshot =
+        await getDoc(
+          doc(
+            db,
+            "investmentRequests",
+            investmentId
+          )
+        );
+
 
       if (!snapshot.exists()) {
-        alert("Investment record not found.");
+
+        alert(
+          "Investment record not found."
+        );
+
         return;
       }
 
-      data = snapshot.data();
 
-    } else {
-
-      currentMemberId = userId;
-      currentMemberSource = "users";
-
-      const snapshot = await getDoc(
-        doc(
-          db,
-          "users",
-          userId
-        )
-      );
-
-      if (!snapshot.exists()) {
-        alert("User record not found.");
-        return;
-      }
-
-      data = snapshot.data();
+      data =
+        snapshot.data();
 
     }
 
 
+    /*
+      Normal signup member
+    */
+
+    else {
+
+      currentMemberId =
+        userId;
+
+      currentMemberSource =
+        "users";
+
+
+      const snapshot =
+        await getDoc(
+          doc(
+            db,
+            "users",
+            userId
+          )
+        );
+
+
+      if (!snapshot.exists()) {
+
+        alert(
+          "User record not found."
+        );
+
+        return;
+      }
+
+
+      data =
+        snapshot.data();
+
+    }
+
+
+    /*
+      Fill popup
+    */
+
     memberEmail.textContent =
       data.email || "-";
+
 
     newBalance.value =
       data.withdrawableBalance || 0;
 
+
     newEarned.value =
       data.totalEarned || 0;
 
-    manageModal.style.display = "flex";
+
+    manageModal.style.display =
+      "flex";
 
 
   } catch (error) {
 
-    console.error("Manage Error:", error);
+    console.error(
+      "Manage Member Error:",
+      error
+    );
 
-    alert("Failed to load member.");
+    alert(
+      "Failed to load member."
+    );
 
   }
 
 }
 
+
+/* =========================
+   SAVE MEMBER
+========================= */
 
 saveMember.addEventListener(
   "click",
@@ -325,7 +483,9 @@ saveMember.addEventListener(
 
     if (!currentMemberId) {
 
-      alert("No member selected.");
+      alert(
+        "No member selected."
+      );
 
       return;
     }
@@ -334,11 +494,20 @@ saveMember.addEventListener(
     try {
 
       const balance =
-        Number(newBalance.value) || 0;
+        Number(
+          newBalance.value
+        ) || 0;
+
 
       const earned =
-        Number(newEarned.value) || 0;
+        Number(
+          newEarned.value
+        ) || 0;
 
+
+      /*
+        Save investment member
+      */
 
       if (
         currentMemberSource ===
@@ -346,29 +515,48 @@ saveMember.addEventListener(
       ) {
 
         await updateDoc(
+
           doc(
             db,
             "investmentRequests",
             currentMemberId
           ),
+
           {
-            withdrawableBalance: balance,
-            totalEarned: earned
+            withdrawableBalance:
+              balance,
+
+            totalEarned:
+              earned
           }
+
         );
 
-      } else {
+      }
+
+
+      /*
+        Save normal user
+      */
+
+      else {
 
         await updateDoc(
+
           doc(
             db,
             "users",
             currentMemberId
           ),
+
           {
-            withdrawableBalance: balance,
-            totalEarned: earned
+            withdrawableBalance:
+              balance,
+
+            totalEarned:
+              earned
           }
+
         );
 
       }
@@ -378,18 +566,23 @@ saveMember.addEventListener(
         "Member updated successfully."
       );
 
-      manageModal.style.display = "none";
+
+      manageModal.style.display =
+        "none";
+
 
       currentMemberId = "";
+
       currentMemberSource = "";
 
-      loadMembers();
+
+      await loadMembers();
 
 
     } catch (error) {
 
       console.error(
-        "Update Error:",
+        "Update Member Error:",
         error
       );
 
@@ -403,28 +596,43 @@ saveMember.addEventListener(
 );
 
 
+/* =========================
+   CLOSE MODAL
+========================= */
+
 closeModal.addEventListener(
   "click",
   function () {
 
-    manageModal.style.display = "none";
+    manageModal.style.display =
+      "none";
 
     currentMemberId = "";
+
     currentMemberSource = "";
 
   }
 );
 
 
+/* =========================
+   CLOSE MODAL OUTSIDE
+========================= */
+
 window.addEventListener(
   "click",
   function (event) {
 
-    if (event.target === manageModal) {
+    if (
+      event.target ===
+      manageModal
+    ) {
 
-      manageModal.style.display = "none";
+      manageModal.style.display =
+        "none";
 
       currentMemberId = "";
+
       currentMemberSource = "";
 
     }
@@ -432,6 +640,10 @@ window.addEventListener(
   }
 );
 
+
+/* =========================
+   SEARCH
+========================= */
 
 searchMember.addEventListener(
   "input",
@@ -442,17 +654,22 @@ searchMember.addEventListener(
         .toLowerCase()
         .trim();
 
+
     const filtered =
       allMembers.filter(
         function (member) {
 
           const name =
-            String(member.name || "")
-              .toLowerCase();
+            String(
+              member.name || ""
+            ).toLowerCase();
+
 
           const email =
-            String(member.email || "")
-              .toLowerCase();
+            String(
+              member.email || ""
+            ).toLowerCase();
+
 
           return (
             name.includes(value) ||
@@ -462,20 +679,44 @@ searchMember.addEventListener(
         }
       );
 
-    renderMembers(filtered);
+
+    renderMembers(
+      filtered
+    );
 
   }
 );
 
 
+/* =========================
+   HTML SAFETY
+========================= */
+
 function escapeHTML(value) {
 
-  return String(value || "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+  return String(
+    value || ""
+  )
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 
 }
 ```
