@@ -30,39 +30,33 @@ let currentMemberSource = "";
 let allMembers = [];
 
 onAuthStateChanged(auth, async (user) => {
+
   if (!user) {
     location.href = "login.html";
     return;
   }
 
   if (user.email !== ADMIN_EMAIL) {
-    document.body.innerHTML = `
-      <h1 style="color:red;text-align:center;margin-top:50px;">
-        Access Denied
-      </h1>
-    `;
+    document.body.innerHTML =
+      "<h1 style='color:red;text-align:center;margin-top:50px;'>Access Denied</h1>";
     return;
   }
 
-  await loadMembers();
+  loadMembers();
 });
 
+
 async function loadMembers() {
-  membersTable.innerHTML = `
-    <tr>
-      <td colspan="6" style="padding:30px;text-align:center;">
-        Loading Members...
-      </td>
-    </tr>
-  `;
+
+  membersTable.innerHTML =
+    "<tr><td colspan='6' style='padding:30px;text-align:center;'>Loading Members...</td></tr>";
 
   try {
-    // All registered users
+
     const usersSnapshot = await getDocs(
       collection(db, "users")
     );
 
-    // Approved investments
     const investmentQuery = query(
       collection(db, "investmentRequests"),
       where("status", "==", "Approved")
@@ -72,28 +66,32 @@ async function loadMembers() {
       investmentQuery
     );
 
-    const investmentsByUid = new Map();
+    const investments = new Map();
 
     investmentSnapshot.forEach((item) => {
+
       const data = item.data();
 
       if (data.uid) {
-        investmentsByUid.set(data.uid, {
+        investments.set(data.uid, {
           id: item.id,
           ...data
         });
       }
+
     });
 
     allMembers = [];
 
     usersSnapshot.forEach((item) => {
+
       const userData = item.data();
       const uid = item.id;
 
-      const investment = investmentsByUid.get(uid);
+      const investment = investments.get(uid);
 
       allMembers.push({
+
         userId: uid,
 
         investmentId: investment
@@ -104,7 +102,7 @@ async function loadMembers() {
           ? "investmentRequests"
           : "users",
 
-        senderName:
+        name:
           userData.name ||
           userData.senderName ||
           "-",
@@ -113,131 +111,160 @@ async function loadMembers() {
           userData.email ||
           "-",
 
-        planName:
-          investment?.planName ||
-          (investment?.plan
-            ? "Plan Rs." + investment.plan
-            : "No Investment"),
+        plan:
+          investment
+            ? (
+                investment.planName ||
+                ("Rs." + (investment.plan || 0))
+              )
+            : "No Investment",
 
-        withdrawableBalance:
-          investment?.withdrawableBalance ??
-          userData.withdrawableBalance ??
-          0,
+        balance:
+          investment
+            ? (investment.withdrawableBalance || 0)
+            : (userData.withdrawableBalance || 0),
 
-        totalEarned:
-          investment?.totalEarned ??
-          userData.totalEarned ??
-          0,
+        earned:
+          investment
+            ? (investment.totalEarned || 0)
+            : (userData.totalEarned || 0),
 
         status:
-          investment?.status ||
-          "No Investment"
+          investment
+            ? "Approved"
+            : "No Investment"
+
       });
+
     });
 
     renderMembers(allMembers);
 
   } catch (error) {
-    console.error("Members Loading Error:", error);
 
-    membersTable.innerHTML = `
-      <tr>
-        <td colspan="6" style="padding:30px;text-align:center;color:red;">
-          Error Loading Members
-        </td>
-      </tr>
-    `;
+    console.error("Members Error:", error);
+
+    membersTable.innerHTML =
+      "<tr><td colspan='6' style='padding:30px;text-align:center;color:red;'>Error Loading Members</td></tr>";
+
   }
+
 }
 
+
 function renderMembers(list) {
+
   if (list.length === 0) {
-    membersTable.innerHTML = `
-      <tr>
-        <td colspan="6" style="padding:30px;text-align:center;">
-          No Members Found
-        </td>
-      </tr>
-    `;
+
+    membersTable.innerHTML =
+      "<tr><td colspan='6' style='padding:30px;text-align:center;'>No Members Found</td></tr>";
+
     return;
   }
 
   let html = "";
 
   list.forEach((member) => {
-    let statusStyle = "";
 
-    if (member.status === "Approved") {
-      statusStyle = 'style="color:#2ecc71;font-weight:bold;"';
-    } else if (member.status === "No Investment") {
-      statusStyle = 'style="color:#f1c40f;font-weight:bold;"';
-    }
+    html +=
+      "<tr>" +
 
-    html += `
-      <tr>
+      "<td style='padding:15px;'>" +
+      escapeHTML(member.name) +
+      "</td>" +
 
-        <td style="padding:15px;">
-          ${escapeHTML(member.senderName)}
-        </td>
+      "<td>" +
+      escapeHTML(member.email) +
+      "</td>" +
 
-        <td>
-          ${escapeHTML(member.email)}
-        </td>
+      "<td>" +
+      escapeHTML(member.plan) +
+      "</td>" +
 
-        <td>
-          ${escapeHTML(member.planName)}
-        </td>
+      "<td>" +
+      "Rs." +
+      Number(member.balance || 0) +
+      "</td>" +
 
-        <td>
-          Rs.${Number(member.withdrawableBalance || 0)}
-        </td>
+      "<td>" +
+      escapeHTML(member.status) +
+      "</td>" +
 
-        <td ${statusStyle}>
-          ${escapeHTML(member.status)}
-        </td>
+      "<td>" +
 
-        <td>
-          <button
-            class="manage-btn"
-            data-user-id="${member.userId}"
-            data-investment-id="${member.investmentId}"
-            data-source="${member.source}">
-            Manage
-          </button>
-        </td>
+      "<button " +
+      "class='manage-btn' " +
+      "data-user-id='" +
+      member.userId +
+      "' " +
+      "data-investment-id='" +
+      member.investmentId +
+      "' " +
+      "data-source='" +
+      member.source +
+      "'>" +
 
-      </tr>
-    `;
+      "Manage" +
+
+      "</button>" +
+
+      "</td>" +
+
+      "</tr>";
+
   });
 
   membersTable.innerHTML = html;
 
-  document.querySelectorAll(".manage-btn").forEach((button) => {
-    button.addEventListener("click", () => {
-      openManageMember(button);
+
+  document
+    .querySelectorAll(".manage-btn")
+    .forEach((button) => {
+
+      button.addEventListener(
+        "click",
+        function () {
+          openMember(this);
+        }
+      );
+
     });
-  });
+
 }
 
-async function openManageMember(button) {
+
+async function openMember(button) {
+
   try {
-    const userId = button.dataset.userId;
-    const investmentId = button.dataset.investmentId;
-    const source = button.dataset.source;
+
+    const userId =
+      button.getAttribute("data-user-id");
+
+    const investmentId =
+      button.getAttribute("data-investment-id");
+
+    const source =
+      button.getAttribute("data-source");
+
 
     let data = {};
 
-    if (source === "investmentRequests" && investmentId) {
+
+    if (
+      source === "investmentRequests" &&
+      investmentId
+    ) {
+
       currentMemberId = investmentId;
       currentMemberSource = "investmentRequests";
 
-      const ref = doc(
-        db,
-        "investmentRequests",
-        investmentId
+      const snapshot = await getDoc(
+        doc(
+          db,
+          "investmentRequests",
+          investmentId
+        )
       );
-
-      const snapshot = await getDoc(ref);
 
       if (!snapshot.exists()) {
         alert("Investment record not found.");
@@ -247,16 +274,17 @@ async function openManageMember(button) {
       data = snapshot.data();
 
     } else {
+
       currentMemberId = userId;
       currentMemberSource = "users";
 
-      const ref = doc(
-        db,
-        "users",
-        userId
+      const snapshot = await getDoc(
+        doc(
+          db,
+          "users",
+          userId
+        )
       );
-
-      const snapshot = await getDoc(ref);
 
       if (!snapshot.exists()) {
         alert("User record not found.");
@@ -264,123 +292,190 @@ async function openManageMember(button) {
       }
 
       data = snapshot.data();
+
     }
+
 
     memberEmail.textContent =
       data.email || "-";
 
     newBalance.value =
-      data.withdrawableBalance ?? 0;
+      data.withdrawableBalance || 0;
 
     newEarned.value =
-      data.totalEarned ?? 0;
+      data.totalEarned || 0;
 
     manageModal.style.display = "flex";
 
+
   } catch (error) {
+
     console.error("Manage Error:", error);
+
     alert("Failed to load member.");
+
   }
+
 }
 
-saveMember.addEventListener("click", async () => {
-  if (!currentMemberId) {
-    alert("No member selected.");
-    return;
-  }
 
-  try {
-    const balance =
-      Number(newBalance.value) || 0;
+saveMember.addEventListener(
+  "click",
+  async function () {
 
-    const earned =
-      Number(newEarned.value) || 0;
+    if (!currentMemberId) {
 
-    if (currentMemberSource === "investmentRequests") {
-      await updateDoc(
-        doc(
-          db,
-          "investmentRequests",
-          currentMemberId
-        ),
-        {
-          withdrawableBalance: balance,
-          totalEarned: earned
-        }
-      );
-    } else {
-      await updateDoc(
-        doc(
-          db,
-          "users",
-          currentMemberId
-        ),
-        {
-          withdrawableBalance: balance,
-          totalEarned: earned
-        }
-      );
+      alert("No member selected.");
+
+      return;
     }
 
-    alert("Member updated successfully.");
+
+    try {
+
+      const balance =
+        Number(newBalance.value) || 0;
+
+      const earned =
+        Number(newEarned.value) || 0;
+
+
+      if (
+        currentMemberSource ===
+        "investmentRequests"
+      ) {
+
+        await updateDoc(
+          doc(
+            db,
+            "investmentRequests",
+            currentMemberId
+          ),
+          {
+            withdrawableBalance: balance,
+            totalEarned: earned
+          }
+        );
+
+      } else {
+
+        await updateDoc(
+          doc(
+            db,
+            "users",
+            currentMemberId
+          ),
+          {
+            withdrawableBalance: balance,
+            totalEarned: earned
+          }
+        );
+
+      }
+
+
+      alert(
+        "Member updated successfully."
+      );
+
+      manageModal.style.display = "none";
+
+      currentMemberId = "";
+      currentMemberSource = "";
+
+      loadMembers();
+
+
+    } catch (error) {
+
+      console.error(
+        "Update Error:",
+        error
+      );
+
+      alert(
+        "Error updating member."
+      );
+
+    }
+
+  }
+);
+
+
+closeModal.addEventListener(
+  "click",
+  function () {
 
     manageModal.style.display = "none";
 
     currentMemberId = "";
     currentMemberSource = "";
 
-    await loadMembers();
-
-  } catch (error) {
-    console.error("Update Error:", error);
-    alert("Error updating member.");
   }
-});
+);
 
-closeModal.addEventListener("click", () => {
-  manageModal.style.display = "none";
-  currentMemberId = "";
-  currentMemberSource = "";
-});
 
-window.addEventListener("click", (event) => {
-  if (event.target === manageModal) {
-    manageModal.style.display = "none";
-    currentMemberId = "";
-    currentMemberSource = "";
+window.addEventListener(
+  "click",
+  function (event) {
+
+    if (event.target === manageModal) {
+
+      manageModal.style.display = "none";
+
+      currentMemberId = "";
+      currentMemberSource = "";
+
+    }
+
   }
-});
+);
 
-searchMember.addEventListener("input", () => {
-  const value =
-    searchMember.value
-      .toLowerCase()
-      .trim();
 
-  const filtered = allMembers.filter((member) => {
-    const name =
-      String(member.senderName || "")
-        .toLowerCase();
+searchMember.addEventListener(
+  "input",
+  function () {
 
-    const email =
-      String(member.email || "")
-        .toLowerCase();
+    const value =
+      searchMember.value
+        .toLowerCase()
+        .trim();
 
-    return (
-      name.includes(value) ||
-      email.includes(value)
-    );
-  });
+    const filtered =
+      allMembers.filter(
+        function (member) {
 
-  renderMembers(filtered);
-});
+          const name =
+            String(member.name || "")
+              .toLowerCase();
+
+          const email =
+            String(member.email || "")
+              .toLowerCase();
+
+          return (
+            name.includes(value) ||
+            email.includes(value)
+          );
+
+        }
+      );
+
+    renderMembers(filtered);
+
+  }
+);
+
 
 function escapeHTML(value) {
-  return String(value ?? "")
+
+  return String(value || "")
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+
 }
 ```
