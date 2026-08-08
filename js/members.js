@@ -29,12 +29,7 @@ let currentMemberId = "";
 let currentMemberSource = "";
 let allMembers = [];
 
-/* ================================
-   ADMIN LOGIN CHECK
-================================ */
-
 onAuthStateChanged(auth, async (user) => {
-
   if (!user) {
     location.href = "login.html";
     return;
@@ -42,11 +37,7 @@ onAuthStateChanged(auth, async (user) => {
 
   if (user.email !== ADMIN_EMAIL) {
     document.body.innerHTML = `
-      <h1 style="
-        color:red;
-        text-align:center;
-        margin-top:50px;
-      ">
+      <h1 style="color:red;text-align:center;margin-top:50px;">
         Access Denied
       </h1>
     `;
@@ -54,16 +45,9 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   await loadMembers();
-
 });
 
-
-/* ================================
-   LOAD ALL MEMBERS
-================================ */
-
 async function loadMembers() {
-
   membersTable.innerHTML = `
     <tr>
       <td colspan="6" style="padding:30px;text-align:center;">
@@ -73,22 +57,12 @@ async function loadMembers() {
   `;
 
   try {
-
-    /*
-      STEP 1:
-      Load ALL users from users collection
-    */
-
+    // All registered users
     const usersSnapshot = await getDocs(
       collection(db, "users")
     );
 
-
-    /*
-      STEP 2:
-      Load approved investment requests
-    */
-
+    // Approved investments
     const investmentQuery = query(
       collection(db, "investmentRequests"),
       where("status", "==", "Approved")
@@ -98,75 +72,38 @@ async function loadMembers() {
       investmentQuery
     );
 
-
-    /*
-      STEP 3:
-      Make map of approved investments by UID
-    */
-
     const investmentsByUid = new Map();
 
     investmentSnapshot.forEach((item) => {
-
       const data = item.data();
 
-      if (!data.uid) {
-        return;
+      if (data.uid) {
+        investmentsByUid.set(data.uid, {
+          id: item.id,
+          ...data
+        });
       }
-
-      /*
-        If user has multiple approved requests,
-        latest one will be used.
-      */
-
-      investmentsByUid.set(data.uid, {
-        id: item.id,
-        ...data
-      });
-
     });
-
-
-    /*
-      STEP 4:
-      Combine users + investment data
-    */
 
     allMembers = [];
 
     usersSnapshot.forEach((item) => {
-
       const userData = item.data();
-
       const uid = item.id;
 
       const investment = investmentsByUid.get(uid);
 
-
       allMembers.push({
-
-        /*
-          User document ID
-        */
         userId: uid,
 
-        /*
-          Investment request ID
-        */
         investmentId: investment
           ? investment.id
           : "",
 
-        /*
-          Which collection should Manage update?
-        */
         source: investment
           ? "investmentRequests"
           : "users",
 
-        /*
-          User information
-        */
         senderName:
           userData.name ||
           userData.senderName ||
@@ -176,124 +113,65 @@ async function loadMembers() {
           userData.email ||
           "-",
 
-        /*
-          Investment information
-        */
         planName:
           investment?.planName ||
           (investment?.plan
             ? "Plan Rs." + investment.plan
             : "No Investment"),
 
-        plan:
-          investment?.plan || 0,
-
-        status:
-          investment?.status ||
-          "No Investment",
-
-        /*
-          Balance
-        */
         withdrawableBalance:
           investment?.withdrawableBalance ??
           userData.withdrawableBalance ??
           0,
 
-        /*
-          Total earned
-        */
         totalEarned:
           investment?.totalEarned ??
           userData.totalEarned ??
-          0
+          0,
 
+        status:
+          investment?.status ||
+          "No Investment"
       });
-
     });
-
-
-    /*
-      STEP 5:
-      Render members
-    */
 
     renderMembers(allMembers);
 
-
   } catch (error) {
-
     console.error("Members Loading Error:", error);
 
     membersTable.innerHTML = `
       <tr>
-        <td colspan="6"
-            style="
-              padding:30px;
-              text-align:center;
-              color:red;
-            ">
+        <td colspan="6" style="padding:30px;text-align:center;color:red;">
           Error Loading Members
         </td>
       </tr>
     `;
-
   }
-
 }
 
-
-/* ================================
-   RENDER MEMBERS
-================================ */
-
 function renderMembers(list) {
-
   if (list.length === 0) {
-
     membersTable.innerHTML = `
       <tr>
-        <td colspan="6"
-            style="
-              padding:30px;
-              text-align:center;
-            ">
+        <td colspan="6" style="padding:30px;text-align:center;">
           No Members Found
         </td>
       </tr>
     `;
-
     return;
   }
 
-
   let html = "";
 
-
   list.forEach((member) => {
-
-    let statusClass = "";
+    let statusStyle = "";
 
     if (member.status === "Approved") {
-
-      statusClass = `
-        style="
-          color:#2ecc71;
-          font-weight:bold;
-        "
-      `;
-
+      statusStyle = 'style="color:#2ecc71;font-weight:bold;"';
     } else if (member.status === "No Investment") {
-
-      statusClass = `
-        style="
-          color:#f1c40f;
-          font-weight:bold;
-        "
-      `;
-
+      statusStyle = 'style="color:#f1c40f;font-weight:bold;"';
     }
-
 
     html += `
       <tr>
@@ -314,388 +192,195 @@ function renderMembers(list) {
           Rs.${Number(member.withdrawableBalance || 0)}
         </td>
 
-        <td ${statusClass}>
+        <td ${statusStyle}>
           ${escapeHTML(member.status)}
         </td>
 
         <td>
-
           <button
             class="manage-btn"
             data-user-id="${member.userId}"
             data-investment-id="${member.investmentId}"
             data-source="${member.source}">
-
             Manage
-
           </button>
-
         </td>
 
       </tr>
     `;
-
   });
-
 
   membersTable.innerHTML = html;
 
-
-  /*
-    Manage buttons
-  */
-
-  document
-    .querySelectorAll(".manage-btn")
-    .forEach((button) => {
-
-      button.addEventListener(
-        "click",
-        () => openManageMember(button)
-      );
-
+  document.querySelectorAll(".manage-btn").forEach((button) => {
+    button.addEventListener("click", () => {
+      openManageMember(button);
     });
-
+  });
 }
 
-
-/* ================================
-   OPEN MANAGE MEMBER
-================================ */
-
 async function openManageMember(button) {
-
   try {
-
-    const userId =
-      button.dataset.userId;
-
-    const investmentId =
-      button.dataset.investmentId;
-
-    const source =
-      button.dataset.source;
-
+    const userId = button.dataset.userId;
+    const investmentId = button.dataset.investmentId;
+    const source = button.dataset.source;
 
     let data = {};
 
-
-    /*
-      Approved investment member
-    */
-
-    if (
-      source === "investmentRequests" &&
-      investmentId
-    ) {
-
+    if (source === "investmentRequests" && investmentId) {
       currentMemberId = investmentId;
       currentMemberSource = "investmentRequests";
 
-
-      const memberRef = doc(
+      const ref = doc(
         db,
         "investmentRequests",
         investmentId
       );
 
-      const snapshot =
-        await getDoc(memberRef);
-
+      const snapshot = await getDoc(ref);
 
       if (!snapshot.exists()) {
-
         alert("Investment record not found.");
         return;
-
       }
 
       data = snapshot.data();
 
-    }
-
-
-    /*
-      New signup member
-    */
-
-    else {
-
+    } else {
       currentMemberId = userId;
       currentMemberSource = "users";
 
-
-      const userRef = doc(
+      const ref = doc(
         db,
         "users",
         userId
       );
 
-      const snapshot =
-        await getDoc(userRef);
-
+      const snapshot = await getDoc(ref);
 
       if (!snapshot.exists()) {
-
         alert("User record not found.");
         return;
-
       }
 
       data = snapshot.data();
-
     }
-
-
-    /*
-      Fill popup
-    */
 
     memberEmail.textContent =
       data.email || "-";
 
-
     newBalance.value =
       data.withdrawableBalance ?? 0;
-
 
     newEarned.value =
       data.totalEarned ?? 0;
 
-
-    manageModal.style.display =
-      "flex";
-
+    manageModal.style.display = "flex";
 
   } catch (error) {
-
-    console.error(
-      "Manage Member Error:",
-      error
-    );
-
-    alert(
-      "Failed to load member details."
-    );
-
+    console.error("Manage Error:", error);
+    alert("Failed to load member.");
   }
-
 }
 
-
-/* ================================
-   SAVE MEMBER
-================================ */
-
-saveMember.addEventListener(
-  "click",
-  async () => {
-
-    if (!currentMemberId) {
-
-      alert("No member selected.");
-      return;
-
-    }
-
-
-    try {
-
-      const balance =
-        Number(newBalance.value) || 0;
-
-      const earned =
-        Number(newEarned.value) || 0;
-
-
-      /*
-        Update investment member
-      */
-
-      if (
-        currentMemberSource ===
-        "investmentRequests"
-      ) {
-
-        await updateDoc(
-
-          doc(
-            db,
-            "investmentRequests",
-            currentMemberId
-          ),
-
-          {
-            withdrawableBalance:
-              balance,
-
-            totalEarned:
-              earned
-          }
-
-        );
-
-      }
-
-
-      /*
-        Update new signup user
-      */
-
-      else {
-
-        await updateDoc(
-
-          doc(
-            db,
-            "users",
-            currentMemberId
-          ),
-
-          {
-            withdrawableBalance:
-              balance,
-
-            totalEarned:
-              earned
-          }
-
-        );
-
-      }
-
-
-      alert(
-        "Member updated successfully."
-      );
-
-
-      manageModal.style.display =
-        "none";
-
-
-      currentMemberId = "";
-      currentMemberSource = "";
-
-
-      await loadMembers();
-
-    } catch (error) {
-
-      console.error(
-        "Update Member Error:",
-        error
-      );
-
-      alert(
-        "Error updating member."
-      );
-
-    }
-
+saveMember.addEventListener("click", async () => {
+  if (!currentMemberId) {
+    alert("No member selected.");
+    return;
   }
-);
 
+  try {
+    const balance =
+      Number(newBalance.value) || 0;
 
-/* ================================
-   CLOSE MODAL
-================================ */
+    const earned =
+      Number(newEarned.value) || 0;
 
-closeModal.addEventListener(
-  "click",
-  () => {
+    if (currentMemberSource === "investmentRequests") {
+      await updateDoc(
+        doc(
+          db,
+          "investmentRequests",
+          currentMemberId
+        ),
+        {
+          withdrawableBalance: balance,
+          totalEarned: earned
+        }
+      );
+    } else {
+      await updateDoc(
+        doc(
+          db,
+          "users",
+          currentMemberId
+        ),
+        {
+          withdrawableBalance: balance,
+          totalEarned: earned
+        }
+      );
+    }
 
-    manageModal.style.display =
-      "none";
+    alert("Member updated successfully.");
+
+    manageModal.style.display = "none";
 
     currentMemberId = "";
     currentMemberSource = "";
 
+    await loadMembers();
+
+  } catch (error) {
+    console.error("Update Error:", error);
+    alert("Error updating member.");
   }
-);
+});
 
+closeModal.addEventListener("click", () => {
+  manageModal.style.display = "none";
+  currentMemberId = "";
+  currentMemberSource = "";
+});
 
-/* ================================
-   CLOSE MODAL OUTSIDE
-================================ */
-
-window.addEventListener(
-  "click",
-  (event) => {
-
-    if (
-      event.target === manageModal
-    ) {
-
-      manageModal.style.display =
-        "none";
-
-      currentMemberId = "";
-      currentMemberSource = "";
-
-    }
-
+window.addEventListener("click", (event) => {
+  if (event.target === manageModal) {
+    manageModal.style.display = "none";
+    currentMemberId = "";
+    currentMemberSource = "";
   }
-);
+});
 
+searchMember.addEventListener("input", () => {
+  const value =
+    searchMember.value
+      .toLowerCase()
+      .trim();
 
-/* ================================
-   SEARCH MEMBERS
-================================ */
+  const filtered = allMembers.filter((member) => {
+    const name =
+      String(member.senderName || "")
+        .toLowerCase();
 
-searchMember.addEventListener(
-  "input",
-  () => {
+    const email =
+      String(member.email || "")
+        .toLowerCase();
 
-    const value =
-      searchMember.value
-        .toLowerCase()
-        .trim();
+    return (
+      name.includes(value) ||
+      email.includes(value)
+    );
+  });
 
-
-    const filtered =
-      allMembers.filter(
-        (member) => {
-
-          const name =
-            String(
-              member.senderName || ""
-            ).toLowerCase();
-
-
-          const email =
-            String(
-              member.email || ""
-            ).toLowerCase();
-
-
-          return (
-            name.includes(value) ||
-            email.includes(value)
-          );
-
-        }
-      );
-
-
-    renderMembers(filtered);
-
-  }
-);
-
-
-/* ================================
-   HTML SAFETY
-================================ */
+  renderMembers(filtered);
+});
 
 function escapeHTML(value) {
-
   return String(value ?? "")
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
-
 }
 ```
