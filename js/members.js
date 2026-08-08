@@ -1,4 +1,4 @@
-```javascript
+
 import {
   db,
   auth,
